@@ -1,0 +1,35 @@
+{
+  "grammars": [
+    {
+      "name": "isle",
+      "camelcase": "Isle",
+      "scope": "source.isle",
+      "file-types": [
+        "isle"
+      ],
+      "injection-regex": "^isle$"
+    }
+  ],
+  "metadata": {
+    "version": "0.1.0",
+    "license": "Apache-2.0",
+    "description": "Tree sitter for ISLE",
+    "authors": [
+      {
+        "name": "eagr",
+        "email": "eagr@tutanota.com"
+      }
+    ],
+    "links": {
+      "repository": "https://github.com/eagr/tree-sitter-isle"
+    }
+  },
+  "bindings": {
+    "c": true,
+    "go": true,
+    "node": true,
+    "python": true,
+    "rust": true,
+    "swift": true
+  }
+}
