@@ -37,6 +37,8 @@ module.exports = grammar({
       $.convert,
     ),
 
+    // ;;;; base ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
     ty: $ => alias($.ident, $.ty),
     ident: $ => /[^\s\(\);0-9-][^\s\(\);@]*/,
     const_ident: $ => /\$[^\s\(\);@]*/,
@@ -52,6 +54,24 @@ module.exports = grammar({
 
     wildcard: $ => '_',
 
+    if_let: $ => seq('(', 'if-let', $._pattern, $._expr, ')'),
+
+    if: $ => seq('(', 'if', $._expr, ')'),
+
+    let: $ => seq(
+      '(',
+      'let',
+      field('bindings', seq(
+        '(',
+        repeat($.let_binding),
+        ')',
+      )),
+      field('body', $._expr),
+      ')',
+    ),
+
+    let_binding: $ => seq('(', $.ident, $.ty, $._expr, ')'),
+
     _pattern: $ => choice(
       $.int,
       $.bool,
@@ -60,6 +80,15 @@ module.exports = grammar({
       seq($.ident, '@', $._pattern),
       seq('(', 'and', repeat($._pattern), ')'),
       seq('(', $.ident, repeat($._pattern), ')'),
+    ),
+
+    _expr: $ => choice(
+      $.int,
+      $.bool,
+      $.const_ident,
+      $.ident,
+      $.let,
+      seq('(', $.ident, repeat($._expr), ')'),
     ),
 
     // ;;;; pragma ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -76,53 +105,49 @@ module.exports = grammar({
     type: $ => seq(
       '(',
       'type',
-      $.ident,
-      optional($._type_opt),
-      $._type_body,
+      field('name', $.ident),
+      optional(field('attrs', choice('nodebug', 'extern'))),
+      field('body', choice($.primitive, $.enum)),
       ')',
     ),
 
-    _type_opt: $ => choice(
-      'extern',
-      'nodebug',
-    ),
+    primitive: $ => seq('(', 'primitive', $.ident, ')'),
 
-    _type_body: $ => choice(
-      $._type_body_primitive,
-      $._type_body_enum,
-    ),
-
-    _type_body_primitive: $ => seq('(', 'primitive', $.ident, ')'),
-
-    _type_body_enum: $ => seq(
+    enum: $ => seq(
       '(',
       'enum',
-      choice(
-        $.ident,
-        seq('(', $.ident, repeat($._enum_variant), ')'),
-      ),
+      field('variants', repeat($.enum_variant)),
       ')',
     ),
-    _enum_variant: $ => seq('(', $.ident, $.ty, ')'),
+
+    enum_variant: $ => choice(
+      $.ident,
+      seq(
+        '(',
+        $.ident,
+        repeat($.enum_variant_field),
+        ')',
+      ),
+    ),
+
+    enum_variant_field: $ => seq(
+      '(',
+      $.ident,
+      $.ty,
+      ')',
+    ),
 
     // ;;;; decl ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
     decl: $ => seq(
       '(',
       'decl',
-      optional($._decl_opt),
-      optional($._decl_opt),
-      optional($._decl_opt),
-      $.ident,
-      '(', repeat($.ty), ')',
-      $.ty,
+      // TODO make it more accurate
+      field('attrs', repeat(choice('pure', 'multi', 'partial'))),
+      field('name', $.ident),
+      field('params', seq('(', repeat($.ty), ')')),
+      field('ret', $.ty),
       ')',
-    ),
-
-    _decl_opt: $ => choice(
-      'pure',
-      'multi',
-      'partial'
     ),
 
     // ;;;; rule ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -131,51 +156,38 @@ module.exports = grammar({
       '(',
       'rule',
       choice(
-        seq($._rule_name, $._rule_priority, $._pattern),
-        seq($._rule_name, $._pattern),
-        seq($._rule_priority, $._pattern),
-        $._pattern,
+        seq(
+          field('name', $.ident),
+          field('priority', $._rule_priority),
+          field('term', $._pattern),
+        ),
+        seq(
+          field('priority', $._rule_priority),
+          field('term', $._pattern),
+        ),
+        seq(
+          field('name', $.ident),
+          field('term', $._pattern),
+        ),
+        field('term', $._pattern),
       ),
-      repeat($._stmt),
-      $._expr,
+      repeat(choice(
+        $.if_let,
+        $.if,
+      )),
+      field('rewrite', $._expr),
       ')',
     ),
 
-    _rule_name: $ => alias($.ident, '_rule_name'),
     _rule_priority: $ => alias($.int, '_rule_priority'),
-
-    _stmt: $ => choice(
-      $.if_let,
-      $.if,
-    ),
-    if_let: $ => seq('(', 'if-let', $._pattern, $._expr, ')'),
-    if: $ => seq('(', 'if', $._expr, ')'),
-
-    _expr: $ => choice(
-      $.int,
-      $.bool,
-      $.const_ident,
-      $.ident,
-      $.let,
-      seq('(', $.ident, repeat($._expr), ')'),
-    ),
-
-    let: $ => seq(
-      '(',
-      'let',
-      '(', repeat($._let_binding), ')',
-      $._expr,
-      ')',
-    ),
-    _let_binding: $ => seq('(', $.ident, $.ty, $._expr, ')'),
 
     // ;;;; extractor ;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
     extractor: $ => seq(
       '(',
-      alias($.ident, $._extractor_name),
-      repeat($.ident),
-      $._pattern,
+      field('name', $.ident),
+      field('params', repeat($.ident)),
+      field('ret', $._pattern),
       ')',
     ),
 
@@ -185,11 +197,31 @@ module.exports = grammar({
       '(',
       'extern',
       choice(
-        seq('constructor', $.ident, $.ident),
-        seq('extractor', optional('infallible'), $.ident, $.ident),
-        seq('const', $.const_ident, $.ident, $.ty),
+        $._extern_constructor_decl,
+        $._extern_extractor_decl,
+        $._extern_const_decl,
       ),
       ')',
+    ),
+
+    _extern_constructor_decl: $ => seq(
+      'constructor',
+      field('src_name', $.ident),
+      field('target_name', $.ident),
+    ),
+
+    _extern_extractor_decl: $ => seq(
+      'extractor',
+      field('attrs', optional('infallible')),
+      field('src_name', $.ident),
+      field('target_name', $.ident),
+    ),
+
+    _extern_const_decl: $ => seq(
+      'const',
+      $.const_ident,
+      $.ident,
+      $.ty,
     ),
 
     // ;;;; convert ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -197,21 +229,25 @@ module.exports = grammar({
     convert: $ => seq(
       '(',
       'convert',
-      $.ty,
-      $.ty,
-      $.ident,
+      field('from', $.ty),
+      field('to', $.ty),
+      field('name', $.ident),
       ')',
     ),
 
     // ;;;; comment ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-    comment: _ => token(choice(
-      seq(';', /[^\r\n]*/),
-      seq(
-        '(;',
-        /[^;]*;+([^\(;][^;]*;+)*/,
-        ')',
-      ),
+    comment: _ => choice(
+      _.line_comment,
+      _.block_comment,
+    ),
+
+    line_comment: _ => token(seq(';', /[^\r\n]*/)),
+
+    block_comment: _ => token(seq(
+      '(;',
+      /[^;]*;+([^\(;][^;]*;+)*/,
+      ')',
     )),
   }
 });
