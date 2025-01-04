@@ -10,6 +10,52 @@
     "fields": {}
   },
   {
+    "type": "call",
+    "named": true,
+    "fields": {
+      "args": {
+        "multiple": true,
+        "required": false,
+        "types": [
+          {
+            "type": "bool",
+            "named": true
+          },
+          {
+            "type": "call",
+            "named": true
+          },
+          {
+            "type": "const_ident",
+            "named": true
+          },
+          {
+            "type": "ident",
+            "named": true
+          },
+          {
+            "type": "int",
+            "named": true
+          },
+          {
+            "type": "let",
+            "named": true
+          }
+        ]
+      },
+      "fn": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "ident",
+            "named": true
+          }
+        ]
+      }
+    }
+  },
+  {
     "type": "comment",
     "named": true,
     "fields": {},
@@ -68,24 +114,6 @@
     "type": "decl",
     "named": true,
     "fields": {
-      "modifiers": {
-        "multiple": true,
-        "required": false,
-        "types": [
-          {
-            "type": "multi",
-            "named": false
-          },
-          {
-            "type": "partial",
-            "named": false
-          },
-          {
-            "type": "pure",
-            "named": false
-          }
-        ]
-      },
       "name": {
         "multiple": false,
         "required": true,
@@ -124,38 +152,44 @@
           }
         ]
       }
+    },
+    "children": {
+      "multiple": true,
+      "required": false,
+      "types": [
+        {
+          "type": "decl_modifier",
+          "named": true
+        }
+      ]
     }
   },
   {
-    "type": "enum",
+    "type": "decl_modifier",
     "named": true,
-    "fields": {
-      "variants": {
-        "multiple": true,
-        "required": false,
-        "types": [
-          {
-            "type": "enum_variant",
-            "named": true
-          }
-        ]
-      }
-    }
+    "fields": {}
   },
   {
     "type": "enum_variant",
     "named": true,
-    "fields": {},
+    "fields": {
+      "variant_name": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "ident",
+            "named": true
+          }
+        ]
+      }
+    },
     "children": {
       "multiple": true,
-      "required": true,
+      "required": false,
       "types": [
         {
           "type": "enum_variant_field",
-          "named": true
-        },
-        {
-          "type": "ident",
           "named": true
         }
       ]
@@ -184,13 +218,33 @@
     "type": "extern",
     "named": true,
     "fields": {
-      "modifiers": {
-        "multiple": false,
-        "required": false,
+      "decl": {
+        "multiple": true,
+        "required": true,
         "types": [
           {
-            "type": "infallible",
+            "type": "const",
             "named": false
+          },
+          {
+            "type": "const_ident",
+            "named": true
+          },
+          {
+            "type": "constructor",
+            "named": false
+          },
+          {
+            "type": "extern_extractor_decl",
+            "named": true
+          },
+          {
+            "type": "ident",
+            "named": true
+          },
+          {
+            "type": "ty",
+            "named": true
           }
         ]
       },
@@ -214,21 +268,39 @@
           }
         ]
       }
+    }
+  },
+  {
+    "type": "extern_extractor_decl",
+    "named": true,
+    "fields": {
+      "src_name": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "ident",
+            "named": true
+          }
+        ]
+      },
+      "target_name": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "ident",
+            "named": true
+          }
+        ]
+      }
     },
     "children": {
-      "multiple": true,
+      "multiple": false,
       "required": false,
       "types": [
         {
-          "type": "const_ident",
-          "named": true
-        },
-        {
-          "type": "ident",
-          "named": true
-        },
-        {
-          "type": "ty",
+          "type": "extern_extractor_decl_modifier",
           "named": true
         }
       ]
@@ -307,11 +379,15 @@
     "named": true,
     "fields": {},
     "children": {
-      "multiple": true,
+      "multiple": false,
       "required": true,
       "types": [
         {
           "type": "bool",
+          "named": true
+        },
+        {
+          "type": "call",
           "named": true
         },
         {
@@ -343,6 +419,10 @@
       "types": [
         {
           "type": "bool",
+          "named": true
+        },
+        {
+          "type": "call",
           "named": true
         },
         {
@@ -396,19 +476,15 @@
         ]
       },
       "body": {
-        "multiple": true,
+        "multiple": false,
         "required": true,
         "types": [
           {
-            "type": "(",
-            "named": false
-          },
-          {
-            "type": ")",
-            "named": false
-          },
-          {
             "type": "bool",
+            "named": true
+          },
+          {
+            "type": "call",
             "named": true
           },
           {
@@ -441,6 +517,10 @@
       "types": [
         {
           "type": "bool",
+          "named": true
+        },
+        {
+          "type": "call",
           "named": true
         },
         {
@@ -482,21 +562,6 @@
     }
   },
   {
-    "type": "primitive",
-    "named": true,
-    "fields": {},
-    "children": {
-      "multiple": false,
-      "required": true,
-      "types": [
-        {
-          "type": "ident",
-          "named": true
-        }
-      ]
-    }
-  },
-  {
     "type": "rule",
     "named": true,
     "fields": {
@@ -521,19 +586,15 @@
         ]
       },
       "rewrite": {
-        "multiple": true,
+        "multiple": false,
         "required": true,
         "types": [
           {
-            "type": "(",
-            "named": false
-          },
-          {
-            "type": ")",
-            "named": false
-          },
-          {
             "type": "bool",
+            "named": true
+          },
+          {
+            "type": "call",
             "named": true
           },
           {
@@ -676,30 +737,63 @@
         "required": true,
         "types": [
           {
-            "type": "enum",
+            "type": "type_enum",
             "named": true
           },
           {
-            "type": "primitive",
+            "type": "type_primitive",
             "named": true
-          }
-        ]
-      },
-      "modifiers": {
-        "multiple": false,
-        "required": false,
-        "types": [
-          {
-            "type": "extern",
-            "named": false
-          },
-          {
-            "type": "nodebug",
-            "named": false
           }
         ]
       },
       "name": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "ident",
+            "named": true
+          }
+        ]
+      }
+    },
+    "children": {
+      "multiple": false,
+      "required": false,
+      "types": [
+        {
+          "type": "type_modifier",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "type_enum",
+    "named": true,
+    "fields": {
+      "variants": {
+        "multiple": true,
+        "required": false,
+        "types": [
+          {
+            "type": "enum_variant",
+            "named": true
+          }
+        ]
+      }
+    }
+  },
+  {
+    "type": "type_modifier",
+    "named": true,
+    "fields": {}
+  },
+  {
+    "type": "type_primitive",
+    "named": true,
+    "fields": {
+      "primitive_name": {
         "multiple": false,
         "required": true,
         "types": [
@@ -760,6 +854,10 @@
     "named": false
   },
   {
+    "type": "extern_extractor_decl_modifier",
+    "named": true
+  },
+  {
     "type": "extractor",
     "named": false
   },
@@ -777,10 +875,6 @@
   },
   {
     "type": "if-let",
-    "named": false
-  },
-  {
-    "type": "infallible",
     "named": false
   },
   {

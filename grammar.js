@@ -72,6 +72,13 @@ module.exports = grammar({
 
     let_binding: $ => seq('(', $.ident, $.ty, $._expr, ')'),
 
+    call: $ => seq(
+      '(',
+      field('fn', $.ident),
+      field('args', repeat($._expr)),
+      ')',
+    ),
+
     _pattern: $ => choice(
       $.int,
       $.bool,
@@ -88,7 +95,7 @@ module.exports = grammar({
       $.const_ident,
       $.ident,
       $.let,
-      seq('(', $.ident, repeat($._expr), ')'),
+      $.call,
     ),
 
     // ;;;; pragma ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -106,14 +113,24 @@ module.exports = grammar({
       '(',
       'type',
       field('name', $.ident),
-      optional(field('modifiers', choice('nodebug', 'extern'))),
-      field('body', choice($.primitive, $.enum)),
+      optional($.type_modifier),
+      field('body', choice($.type_primitive, $.type_enum)),
       ')',
     ),
 
-    primitive: $ => seq('(', 'primitive', $.ident, ')'),
+    type_modifier: $ => choice(
+      "extern",
+      "nodebug",
+    ),
 
-    enum: $ => seq(
+    type_primitive: $ => seq(
+      '(',
+      'primitive',
+      field('primitive_name', $.ident),
+      ')',
+    ),
+
+    type_enum: $ => seq(
       '(',
       'enum',
       field('variants', repeat($.enum_variant)),
@@ -121,10 +138,10 @@ module.exports = grammar({
     ),
 
     enum_variant: $ => choice(
-      $.ident,
+      field('variant_name', $.ident),
       seq(
         '(',
-        $.ident,
+        field('variant_name', $.ident),
         repeat($.enum_variant_field),
         ')',
       ),
@@ -142,12 +159,17 @@ module.exports = grammar({
     decl: $ => seq(
       '(',
       'decl',
-      // TODO make it more accurate
-      field('modifiers', repeat(choice('pure', 'multi', 'partial'))),
+      repeat($.decl_modifier),  // HACK
       field('name', $.ident),
       field('params', seq('(', repeat($.ty), ')')),
       field('ret', $.ty),
       ')',
+    ),
+
+    decl_modifier: $ => choice(
+      'multi',
+      'partial',
+      'pure',
     ),
 
     // ;;;; rule ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -196,11 +218,11 @@ module.exports = grammar({
     extern: $ => seq(
       '(',
       'extern',
-      choice(
+      field('decl', choice(
         $._extern_constructor_decl,
-        $._extern_extractor_decl,
+        $.extern_extractor_decl,
         $._extern_const_decl,
-      ),
+      )),
       ')',
     ),
 
@@ -210,12 +232,14 @@ module.exports = grammar({
       field('target_name', $.ident),
     ),
 
-    _extern_extractor_decl: $ => seq(
+    extern_extractor_decl: $ => seq(
       'extractor',
-      field('modifiers', optional('infallible')),
+      optional($.extern_extractor_decl_modifier),
       field('src_name', $.ident),
       field('target_name', $.ident),
     ),
+
+    extern_extractor_decl_modifier: $ => 'infallible',
 
     _extern_const_decl: $ => seq(
       'const',
