@@ -1,59 +1,8 @@
 [
   {
-    "type": "_rule_priority",
-    "named": false,
-    "fields": {}
-  },
-  {
     "type": "bool",
     "named": true,
     "fields": {}
-  },
-  {
-    "type": "call",
-    "named": true,
-    "fields": {
-      "args": {
-        "multiple": true,
-        "required": false,
-        "types": [
-          {
-            "type": "bool",
-            "named": true
-          },
-          {
-            "type": "call",
-            "named": true
-          },
-          {
-            "type": "const_ident",
-            "named": true
-          },
-          {
-            "type": "ident",
-            "named": true
-          },
-          {
-            "type": "int",
-            "named": true
-          },
-          {
-            "type": "let",
-            "named": true
-          }
-        ]
-      },
-      "fn": {
-        "multiple": false,
-        "required": true,
-        "types": [
-          {
-            "type": "ident",
-            "named": true
-          }
-        ]
-      }
-    }
   },
   {
     "type": "comment",
@@ -78,7 +27,7 @@
     "type": "convert",
     "named": true,
     "fields": {
-      "from": {
+      "inner": {
         "multiple": false,
         "required": true,
         "types": [
@@ -88,22 +37,22 @@
           }
         ]
       },
-      "name": {
+      "outer": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "ty",
+            "named": true
+          }
+        ]
+      },
+      "term": {
         "multiple": false,
         "required": true,
         "types": [
           {
             "type": "ident",
-            "named": true
-          }
-        ]
-      },
-      "to": {
-        "multiple": false,
-        "required": true,
-        "types": [
-          {
-            "type": "ty",
             "named": true
           }
         ]
@@ -114,6 +63,42 @@
     "type": "decl",
     "named": true,
     "fields": {
+      "param_types": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "param_types",
+            "named": true
+          }
+        ]
+      },
+      "ret_type": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "ty",
+            "named": true
+          }
+        ]
+      },
+      "term": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "ident",
+            "named": true
+          }
+        ]
+      }
+    }
+  },
+  {
+    "type": "enum_variant",
+    "named": true,
+    "fields": {
       "name": {
         "multiple": false,
         "required": true,
@@ -123,34 +108,6 @@
             "named": true
           }
         ]
-      },
-      "params": {
-        "multiple": true,
-        "required": true,
-        "types": [
-          {
-            "type": "(",
-            "named": false
-          },
-          {
-            "type": ")",
-            "named": false
-          },
-          {
-            "type": "ty",
-            "named": true
-          }
-        ]
-      },
-      "ret": {
-        "multiple": false,
-        "required": true,
-        "types": [
-          {
-            "type": "ty",
-            "named": true
-          }
-        ]
       }
     },
     "children": {
@@ -158,45 +115,14 @@
       "required": false,
       "types": [
         {
-          "type": "decl_modifier",
+          "type": "variant_field",
           "named": true
         }
       ]
     }
   },
   {
-    "type": "decl_modifier",
-    "named": true,
-    "fields": {}
-  },
-  {
-    "type": "enum_variant",
-    "named": true,
-    "fields": {
-      "variant_name": {
-        "multiple": false,
-        "required": true,
-        "types": [
-          {
-            "type": "ident",
-            "named": true
-          }
-        ]
-      }
-    },
-    "children": {
-      "multiple": true,
-      "required": false,
-      "types": [
-        {
-          "type": "enum_variant_field",
-          "named": true
-        }
-      ]
-    }
-  },
-  {
-    "type": "enum_variant_field",
+    "type": "expr_term",
     "named": true,
     "fields": {},
     "children": {
@@ -204,53 +130,75 @@
       "required": true,
       "types": [
         {
+          "type": "bool",
+          "named": true
+        },
+        {
+          "type": "const_ident",
+          "named": true
+        },
+        {
+          "type": "expr_term",
+          "named": true
+        },
+        {
           "type": "ident",
           "named": true
         },
         {
-          "type": "ty",
+          "type": "int",
+          "named": true
+        },
+        {
+          "type": "let",
           "named": true
         }
       ]
     }
   },
   {
-    "type": "extern",
+    "type": "extern_const",
     "named": true,
     "fields": {
-      "decl": {
-        "multiple": true,
+      "kind": {
+        "multiple": false,
         "required": true,
         "types": [
           {
             "type": "const",
             "named": false
-          },
+          }
+        ]
+      },
+      "name": {
+        "multiple": false,
+        "required": true,
+        "types": [
           {
             "type": "const_ident",
             "named": true
-          },
-          {
-            "type": "constructor",
-            "named": false
-          },
-          {
-            "type": "extern_extractor_decl",
-            "named": true
-          },
-          {
-            "type": "ident",
-            "named": true
-          },
+          }
+        ]
+      },
+      "ty": {
+        "multiple": false,
+        "required": true,
+        "types": [
           {
             "type": "ty",
             "named": true
           }
         ]
-      },
-      "src_name": {
+      }
+    }
+  },
+  {
+    "type": "extern_constructor",
+    "named": true,
+    "fields": {
+      "fn": {
         "multiple": false,
-        "required": false,
+        "required": true,
         "types": [
           {
             "type": "ident",
@@ -258,9 +206,19 @@
           }
         ]
       },
-      "target_name": {
+      "kind": {
         "multiple": false,
-        "required": false,
+        "required": true,
+        "types": [
+          {
+            "type": "constructor",
+            "named": false
+          }
+        ]
+      },
+      "term": {
+        "multiple": false,
+        "required": true,
         "types": [
           {
             "type": "ident",
@@ -271,10 +229,10 @@
     }
   },
   {
-    "type": "extern_extractor_decl",
+    "type": "extern_extractor",
     "named": true,
     "fields": {
-      "src_name": {
+      "fn": {
         "multiple": false,
         "required": true,
         "types": [
@@ -284,7 +242,27 @@
           }
         ]
       },
-      "target_name": {
+      "kind": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "extractor",
+            "named": false
+          }
+        ]
+      },
+      "modifier": {
+        "multiple": false,
+        "required": false,
+        "types": [
+          {
+            "type": "infallible",
+            "named": false
+          }
+        ]
+      },
+      "term": {
         "multiple": false,
         "required": true,
         "types": [
@@ -294,32 +272,12 @@
           }
         ]
       }
-    },
-    "children": {
-      "multiple": false,
-      "required": false,
-      "types": [
-        {
-          "type": "extern_extractor_decl_modifier",
-          "named": true
-        }
-      ]
     }
   },
   {
     "type": "extractor",
     "named": true,
     "fields": {
-      "name": {
-        "multiple": false,
-        "required": true,
-        "types": [
-          {
-            "type": "ident",
-            "named": true
-          }
-        ]
-      },
       "params": {
         "multiple": true,
         "required": false,
@@ -330,26 +288,10 @@
           }
         ]
       },
-      "ret": {
-        "multiple": true,
+      "template": {
+        "multiple": false,
         "required": true,
         "types": [
-          {
-            "type": "(",
-            "named": false
-          },
-          {
-            "type": ")",
-            "named": false
-          },
-          {
-            "type": "@",
-            "named": false
-          },
-          {
-            "type": "and",
-            "named": false
-          },
           {
             "type": "bool",
             "named": true
@@ -367,7 +309,29 @@
             "named": true
           },
           {
+            "type": "pattern_and",
+            "named": true
+          },
+          {
+            "type": "pattern_bind",
+            "named": true
+          },
+          {
+            "type": "pattern_term",
+            "named": true
+          },
+          {
             "type": "wildcard",
+            "named": true
+          }
+        ]
+      },
+      "term": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "ident",
             "named": true
           }
         ]
@@ -387,11 +351,11 @@
           "named": true
         },
         {
-          "type": "call",
+          "type": "const_ident",
           "named": true
         },
         {
-          "type": "const_ident",
+          "type": "expr_term",
           "named": true
         },
         {
@@ -422,11 +386,11 @@
           "named": true
         },
         {
-          "type": "call",
+          "type": "const_ident",
           "named": true
         },
         {
-          "type": "const_ident",
+          "type": "expr_term",
           "named": true
         },
         {
@@ -439,6 +403,18 @@
         },
         {
           "type": "let",
+          "named": true
+        },
+        {
+          "type": "pattern_and",
+          "named": true
+        },
+        {
+          "type": "pattern_bind",
+          "named": true
+        },
+        {
+          "type": "pattern_term",
           "named": true
         },
         {
@@ -484,11 +460,11 @@
             "named": true
           },
           {
-            "type": "call",
+            "type": "const_ident",
             "named": true
           },
           {
-            "type": "const_ident",
+            "type": "expr_term",
             "named": true
           },
           {
@@ -520,11 +496,11 @@
           "named": true
         },
         {
-          "type": "call",
+          "type": "const_ident",
           "named": true
         },
         {
-          "type": "const_ident",
+          "type": "expr_term",
           "named": true
         },
         {
@@ -541,6 +517,150 @@
         },
         {
           "type": "ty",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "param_types",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": false,
+      "types": [
+        {
+          "type": "ty",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "pattern_and",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": false,
+      "types": [
+        {
+          "type": "bool",
+          "named": true
+        },
+        {
+          "type": "const_ident",
+          "named": true
+        },
+        {
+          "type": "ident",
+          "named": true
+        },
+        {
+          "type": "int",
+          "named": true
+        },
+        {
+          "type": "pattern_and",
+          "named": true
+        },
+        {
+          "type": "pattern_bind",
+          "named": true
+        },
+        {
+          "type": "pattern_term",
+          "named": true
+        },
+        {
+          "type": "wildcard",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "pattern_bind",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "bool",
+          "named": true
+        },
+        {
+          "type": "const_ident",
+          "named": true
+        },
+        {
+          "type": "ident",
+          "named": true
+        },
+        {
+          "type": "int",
+          "named": true
+        },
+        {
+          "type": "pattern_and",
+          "named": true
+        },
+        {
+          "type": "pattern_bind",
+          "named": true
+        },
+        {
+          "type": "pattern_term",
+          "named": true
+        },
+        {
+          "type": "wildcard",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "pattern_term",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "bool",
+          "named": true
+        },
+        {
+          "type": "const_ident",
+          "named": true
+        },
+        {
+          "type": "ident",
+          "named": true
+        },
+        {
+          "type": "int",
+          "named": true
+        },
+        {
+          "type": "pattern_and",
+          "named": true
+        },
+        {
+          "type": "pattern_bind",
+          "named": true
+        },
+        {
+          "type": "pattern_term",
+          "named": true
+        },
+        {
+          "type": "wildcard",
           "named": true
         }
       ]
@@ -580,79 +700,7 @@
         "required": false,
         "types": [
           {
-            "type": "_rule_priority",
-            "named": false
-          }
-        ]
-      },
-      "rewrite": {
-        "multiple": false,
-        "required": true,
-        "types": [
-          {
-            "type": "bool",
-            "named": true
-          },
-          {
-            "type": "call",
-            "named": true
-          },
-          {
-            "type": "const_ident",
-            "named": true
-          },
-          {
-            "type": "ident",
-            "named": true
-          },
-          {
             "type": "int",
-            "named": true
-          },
-          {
-            "type": "let",
-            "named": true
-          }
-        ]
-      },
-      "term": {
-        "multiple": true,
-        "required": true,
-        "types": [
-          {
-            "type": "(",
-            "named": false
-          },
-          {
-            "type": ")",
-            "named": false
-          },
-          {
-            "type": "@",
-            "named": false
-          },
-          {
-            "type": "and",
-            "named": false
-          },
-          {
-            "type": "bool",
-            "named": true
-          },
-          {
-            "type": "const_ident",
-            "named": true
-          },
-          {
-            "type": "ident",
-            "named": true
-          },
-          {
-            "type": "int",
-            "named": true
-          },
-          {
-            "type": "wildcard",
             "named": true
           }
         ]
@@ -660,8 +708,24 @@
     },
     "children": {
       "multiple": true,
-      "required": false,
+      "required": true,
       "types": [
+        {
+          "type": "bool",
+          "named": true
+        },
+        {
+          "type": "const_ident",
+          "named": true
+        },
+        {
+          "type": "expr_term",
+          "named": true
+        },
+        {
+          "type": "ident",
+          "named": true
+        },
         {
           "type": "if",
           "named": true
@@ -669,12 +733,24 @@
         {
           "type": "if_let",
           "named": true
+        },
+        {
+          "type": "int",
+          "named": true
+        },
+        {
+          "type": "let",
+          "named": true
+        },
+        {
+          "type": "pattern_term",
+          "named": true
         }
       ]
     }
   },
   {
-    "type": "source_file",
+    "type": "source",
     "named": true,
     "root": true,
     "fields": {},
@@ -691,7 +767,15 @@
           "named": true
         },
         {
-          "type": "extern",
+          "type": "extern_const",
+          "named": true
+        },
+        {
+          "type": "extern_constructor",
+          "named": true
+        },
+        {
+          "type": "extern_extractor",
           "named": true
         },
         {
@@ -716,17 +800,7 @@
   {
     "type": "ty",
     "named": true,
-    "fields": {},
-    "children": {
-      "multiple": false,
-      "required": false,
-      "types": [
-        {
-          "type": "ty",
-          "named": true
-        }
-      ]
-    }
+    "fields": {}
   },
   {
     "type": "type",
@@ -756,16 +830,6 @@
           }
         ]
       }
-    },
-    "children": {
-      "multiple": false,
-      "required": false,
-      "types": [
-        {
-          "type": "type_modifier",
-          "named": true
-        }
-      ]
     }
   },
   {
@@ -785,15 +849,10 @@
     }
   },
   {
-    "type": "type_modifier",
-    "named": true,
-    "fields": {}
-  },
-  {
     "type": "type_primitive",
     "named": true,
     "fields": {
-      "primitive_name": {
+      "name": {
         "multiple": false,
         "required": true,
         "types": [
@@ -803,6 +862,25 @@
           }
         ]
       }
+    }
+  },
+  {
+    "type": "variant_field",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "ident",
+          "named": true
+        },
+        {
+          "type": "ty",
+          "named": true
+        }
+      ]
     }
   },
   {
@@ -854,10 +932,6 @@
     "named": false
   },
   {
-    "type": "extern_extractor_decl_modifier",
-    "named": true
-  },
-  {
     "type": "extractor",
     "named": false
   },
@@ -875,6 +949,10 @@
   },
   {
     "type": "if-let",
+    "named": false
+  },
+  {
+    "type": "infallible",
     "named": false
   },
   {
@@ -915,6 +993,10 @@
   },
   {
     "type": "true",
+    "named": false
+  },
+  {
+    "type": "ty",
     "named": false
   },
   {

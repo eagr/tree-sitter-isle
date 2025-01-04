@@ -1,5 +1,5 @@
 /**
- * @file Tree sitter for ISLE
+ * @file Tree-sitter for ISLE
  * @author eagr <eagr@tutanota.com>
  * @license Apache-2.0
  */
@@ -19,13 +19,12 @@ module.exports = grammar({
   ],
 
   conflicts: $ => [
-    [$._pattern, $._rule_priority],
   ],
 
   word: $ => $.ident,
 
   rules: {
-    source_file: $ => repeat($._def),
+    source: $ => repeat($._def),
 
     _def: $ => choice(
       $.pragma,
@@ -33,26 +32,26 @@ module.exports = grammar({
       $.decl,
       $.rule,
       $.extractor,
-      $.extern,
+      $._extern,
       $.convert,
     ),
 
     // ;;;; base ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-    ty: $ => alias($.ident, $.ty),
-    ident: $ => /[^\s\(\);0-9-][^\s\(\);@]*/,
-    const_ident: $ => /\$[^\s\(\);@]*/,
+    bool: $ => choice('true', 'false'),
 
     int: $ => choice(
-      /-?[0-9_]+/,
+      /-?[0-9][0-9_]*/,
       /-?0[xX][0-9A-Fa-f_]+/,
       /-?0[oO][0-7_]+/,
       /-?0[bB][01_]+/,
     ),
 
-    bool: $ => choice('true', 'false'),
-
     wildcard: $ => '_',
+
+    ident: $ => /[^\s\(\);\$0-9-][^\s\(\);@]*/,
+    ty: $ => alias($.ident, 'ty'),
+    const_ident: $ => /\$[^\s\(\);@]*/,
 
     if_let: $ => seq('(', 'if-let', $._pattern, $._expr, ')'),
 
@@ -72,21 +71,35 @@ module.exports = grammar({
 
     let_binding: $ => seq('(', $.ident, $.ty, $._expr, ')'),
 
-    call: $ => seq(
-      '(',
-      field('fn', $.ident),
-      field('args', repeat($._expr)),
-      ')',
-    ),
-
     _pattern: $ => choice(
       $.int,
       $.bool,
       $.const_ident,
       $.wildcard,
-      seq($.ident, '@', $._pattern),
-      seq('(', 'and', repeat($._pattern), ')'),
-      seq('(', $.ident, repeat($._pattern), ')'),
+      $.ident,
+      $.pattern_bind,
+      $.pattern_and,
+      $.pattern_term,
+    ),
+
+    pattern_bind: $ => seq(
+      $.ident,
+      '@',
+      $._pattern,
+    ),
+
+    pattern_and: $ => seq(
+      '(',
+      'and',
+      repeat($._pattern),
+      ')',
+    ),
+
+    pattern_term: $ => seq(
+      '(',
+      $.ident,
+      repeat($._pattern),
+      ')',
     ),
 
     _expr: $ => choice(
@@ -95,7 +108,14 @@ module.exports = grammar({
       $.const_ident,
       $.ident,
       $.let,
-      $.call,
+      $.expr_term,
+    ),
+
+    expr_term: $ => seq(
+      '(',
+      $.ident,
+      repeat($._expr),
+      ')',
     ),
 
     // ;;;; pragma ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -113,20 +133,15 @@ module.exports = grammar({
       '(',
       'type',
       field('name', $.ident),
-      optional($.type_modifier),
+      optional(choice('extern', 'nodebug')),
       field('body', choice($.type_primitive, $.type_enum)),
       ')',
-    ),
-
-    type_modifier: $ => choice(
-      "extern",
-      "nodebug",
     ),
 
     type_primitive: $ => seq(
       '(',
       'primitive',
-      field('primitive_name', $.ident),
+      field('name', $.ident),
       ')',
     ),
 
@@ -138,16 +153,16 @@ module.exports = grammar({
     ),
 
     enum_variant: $ => choice(
-      field('variant_name', $.ident),
+      field('name', $.ident),
       seq(
         '(',
-        field('variant_name', $.ident),
-        repeat($.enum_variant_field),
+        field('name', $.ident),
+        repeat($.variant_field),
         ')',
       ),
     ),
 
-    enum_variant_field: $ => seq(
+    variant_field: $ => seq(
       '(',
       $.ident,
       $.ty,
@@ -159,17 +174,20 @@ module.exports = grammar({
     decl: $ => seq(
       '(',
       'decl',
-      repeat($.decl_modifier),  // HACK
-      field('name', $.ident),
-      field('params', seq('(', repeat($.ty), ')')),
-      field('ret', $.ty),
+      // order matters
+      optional('pure'),
+      optional('multi'),
+      optional('partial'),
+      field('term', $.ident),
+      field('param_types', $.param_types),
+      field('ret_type', $.ty),
       ')',
     ),
 
-    decl_modifier: $ => choice(
-      'multi',
-      'partial',
-      'pure',
+    param_types: $ => seq(
+      '(',
+      repeat($.ty),
+      ')',
     ),
 
     // ;;;; rule ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -177,75 +195,60 @@ module.exports = grammar({
     rule: $ => seq(
       '(',
       'rule',
-      choice(
-        seq(
-          field('name', $.ident),
-          field('priority', $._rule_priority),
-          field('term', $._pattern),
-        ),
-        seq(
-          field('priority', $._rule_priority),
-          field('term', $._pattern),
-        ),
-        seq(
-          field('name', $.ident),
-          field('term', $._pattern),
-        ),
-        field('term', $._pattern),
-      ),
+      field('name', optional($.ident)),
+      field('priority', optional($.int)),
+      $.pattern_term,
       repeat(choice(
         $.if_let,
         $.if,
       )),
-      field('rewrite', $._expr),
+      $._expr,
       ')',
     ),
-
-    _rule_priority: $ => alias($.int, '_rule_priority'),
 
     // ;;;; extractor ;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
     extractor: $ => seq(
       '(',
-      field('name', $.ident),
+      'extractor',
+      '(',
+      field('term', $.ident),
       field('params', repeat($.ident)),
-      field('ret', $._pattern),
+      ')',
+      field('template', $._pattern),
       ')',
     ),
 
     // ;;;; extern ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-    extern: $ => seq(
+    _extern: $ => seq(
       '(',
       'extern',
-      field('decl', choice(
-        $._extern_constructor_decl,
-        $.extern_extractor_decl,
-        $._extern_const_decl,
-      )),
+      choice(
+        $.extern_const,
+        $.extern_constructor,
+        $.extern_extractor,
+      ),
       ')',
     ),
 
-    _extern_constructor_decl: $ => seq(
-      'constructor',
-      field('src_name', $.ident),
-      field('target_name', $.ident),
+    extern_const: $ => seq(
+      field('kind', 'const'),
+      field('name', $.const_ident),
+      field('ty', $.ty),
     ),
 
-    extern_extractor_decl: $ => seq(
-      'extractor',
-      optional($.extern_extractor_decl_modifier),
-      field('src_name', $.ident),
-      field('target_name', $.ident),
+    extern_constructor: $ => seq(
+      field('kind', 'constructor'),
+      field('term', $.ident),
+      field('fn', $.ident),
     ),
 
-    extern_extractor_decl_modifier: $ => 'infallible',
-
-    _extern_const_decl: $ => seq(
-      'const',
-      $.const_ident,
-      $.ident,
-      $.ty,
+    extern_extractor: $ => seq(
+      field('kind', 'extractor'),
+      field('modifier', optional('infallible')),
+      field('term', $.ident),
+      field('fn', $.ident),
     ),
 
     // ;;;; convert ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -253,9 +256,9 @@ module.exports = grammar({
     convert: $ => seq(
       '(',
       'convert',
-      field('from', $.ty),
-      field('to', $.ty),
-      field('name', $.ident),
+      field('inner', $.ty),
+      field('outer', $.ty),
+      field('term', $.ident),
       ')',
     ),
 
