@@ -72,6 +72,13 @@ module.exports = grammar({
 
     let_binding: $ => seq('(', $.ident, $.ty, $._expr, ')'),
 
+    call: $ => seq(
+      '(',
+      field('fn', $.ident),
+      field('args', repeat($._expr)),
+      ')',
+    ),
+
     _pattern: $ => choice(
       $.int,
       $.bool,
@@ -88,7 +95,7 @@ module.exports = grammar({
       $.const_ident,
       $.ident,
       $.let,
-      seq('(', $.ident, repeat($._expr), ')'),
+      $.call,
     ),
 
     // ;;;; pragma ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -106,14 +113,19 @@ module.exports = grammar({
       '(',
       'type',
       field('name', $.ident),
-      optional(field('modifiers', choice('nodebug', 'extern'))),
-      field('body', choice($.primitive, $.enum)),
+      field('modifiers', optional(choice('nodebug', 'extern'))),
+      field('body', choice($.type_primitive, $.type_enum)),
       ')',
     ),
 
-    primitive: $ => seq('(', 'primitive', $.ident, ')'),
+    type_primitive: $ => seq(
+      '(',
+      'primitive',
+      field('primitive_name', $.ident),
+      ')',
+    ),
 
-    enum: $ => seq(
+    type_enum: $ => seq(
       '(',
       'enum',
       field('variants', repeat($.enum_variant)),
@@ -121,10 +133,10 @@ module.exports = grammar({
     ),
 
     enum_variant: $ => choice(
-      $.ident,
+      field('variant_name', $.ident),
       seq(
         '(',
-        $.ident,
+        field('variant_name', $.ident),
         repeat($.enum_variant_field),
         ')',
       ),

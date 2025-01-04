@@ -7,13 +7,16 @@
       "file-types": [
         "isle"
       ],
-      "injection-regex": "^isle$"
+      "injection-regex": "^isle$",
+      "highlights": [
+        "queries/highlights.scm"
+      ]
     }
   ],
   "metadata": {
     "version": "0.1.0",
     "license": "Apache-2.0",
-    "description": "Tree sitter for ISLE",
+    "description": "Tree-sitter for ISLE",
     "authors": [
       {
         "name": "eagr",
