@@ -398,7 +398,7 @@
           "members": [
             {
               "type": "FIELD",
-              "name": "attrs",
+              "name": "modifiers",
               "content": {
                 "type": "CHOICE",
                 "members": [
@@ -557,7 +557,7 @@
         },
         {
           "type": "FIELD",
-          "name": "attrs",
+          "name": "modifiers",
           "content": {
             "type": "REPEAT",
             "content": {
@@ -867,7 +867,7 @@
         },
         {
           "type": "FIELD",
-          "name": "attrs",
+          "name": "modifiers",
           "content": {
             "type": "CHOICE",
             "members": [

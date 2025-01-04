@@ -538,10 +538,10 @@ static const TSSymbolMetadata ts_symbol_metadata[] = {
 };
 
 enum ts_field_identifiers {
-  field_attrs = 1,
-  field_bindings = 2,
-  field_body = 3,
-  field_from = 4,
+  field_bindings = 1,
+  field_body = 2,
+  field_from = 3,
+  field_modifiers = 4,
   field_name = 5,
   field_params = 6,
   field_priority = 7,
@@ -556,10 +556,10 @@ enum ts_field_identifiers {
 
 static const char * const ts_field_names[] = {
   [0] = NULL,
-  [field_attrs] = "attrs",
   [field_bindings] = "bindings",
   [field_body] = "body",
   [field_from] = "from",
+  [field_modifiers] = "modifiers",
   [field_name] = "name",
   [field_params] = "params",
   [field_priority] = "priority",
@@ -607,7 +607,7 @@ static const TSFieldMapEntry ts_field_map_entries[] = {
     {field_src_name, 2, .inherited = true},
     {field_target_name, 2, .inherited = true},
   [4] =
-    {field_attrs, 2, .inherited = true},
+    {field_modifiers, 2, .inherited = true},
     {field_src_name, 2, .inherited = true},
     {field_target_name, 2, .inherited = true},
   [7] =
@@ -624,11 +624,11 @@ static const TSFieldMapEntry ts_field_map_entries[] = {
     {field_rewrite, 3},
     {field_term, 2},
   [16] =
-    {field_attrs, 3},
     {field_body, 4},
+    {field_modifiers, 3},
     {field_name, 2},
   [19] =
-    {field_attrs, 1},
+    {field_modifiers, 1},
     {field_src_name, 2},
     {field_target_name, 3},
   [22] =
@@ -673,7 +673,7 @@ static const TSFieldMapEntry ts_field_map_entries[] = {
     {field_params, 5},
     {field_ret, 6},
   [53] =
-    {field_attrs, 2},
+    {field_modifiers, 2},
     {field_name, 3},
     {field_params, 4},
     {field_params, 5},
@@ -684,7 +684,7 @@ static const TSFieldMapEntry ts_field_map_entries[] = {
     {field_rewrite, 6},
     {field_term, 4},
   [62] =
-    {field_attrs, 2},
+    {field_modifiers, 2},
     {field_name, 3},
     {field_params, 4},
     {field_params, 5},

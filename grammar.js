@@ -106,7 +106,7 @@ module.exports = grammar({
       '(',
       'type',
       field('name', $.ident),
-      optional(field('attrs', choice('nodebug', 'extern'))),
+      optional(field('modifiers', choice('nodebug', 'extern'))),
       field('body', choice($.primitive, $.enum)),
       ')',
     ),
@@ -143,7 +143,7 @@ module.exports = grammar({
       '(',
       'decl',
       // TODO make it more accurate
-      field('attrs', repeat(choice('pure', 'multi', 'partial'))),
+      field('modifiers', repeat(choice('pure', 'multi', 'partial'))),
       field('name', $.ident),
       field('params', seq('(', repeat($.ty), ')')),
       field('ret', $.ty),
@@ -212,7 +212,7 @@ module.exports = grammar({
 
     _extern_extractor_decl: $ => seq(
       'extractor',
-      field('attrs', optional('infallible')),
+      field('modifiers', optional('infallible')),
       field('src_name', $.ident),
       field('target_name', $.ident),
     ),

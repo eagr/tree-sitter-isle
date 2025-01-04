@@ -68,7 +68,7 @@
     "type": "decl",
     "named": true,
     "fields": {
-      "attrs": {
+      "modifiers": {
         "multiple": true,
         "required": false,
         "types": [
@@ -184,7 +184,7 @@
     "type": "extern",
     "named": true,
     "fields": {
-      "attrs": {
+      "modifiers": {
         "multiple": false,
         "required": false,
         "types": [
@@ -671,20 +671,6 @@
     "type": "type",
     "named": true,
     "fields": {
-      "attrs": {
-        "multiple": false,
-        "required": false,
-        "types": [
-          {
-            "type": "extern",
-            "named": false
-          },
-          {
-            "type": "nodebug",
-            "named": false
-          }
-        ]
-      },
       "body": {
         "multiple": false,
         "required": true,
@@ -696,6 +682,20 @@
           {
             "type": "primitive",
             "named": true
+          }
+        ]
+      },
+      "modifiers": {
+        "multiple": false,
+        "required": false,
+        "types": [
+          {
+            "type": "extern",
+            "named": false
+          },
+          {
+            "type": "nodebug",
+            "named": false
           }
         ]
       },
