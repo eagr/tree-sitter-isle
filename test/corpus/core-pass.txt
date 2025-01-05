@@ -1,0 +1,300 @@
+================================
+type
+================================
+
+(type OperandSize extern (enum Size32 Size64))
+
+(type ExtType
+      (enum
+        (Signed)
+        (Unsigned)))
+
+(type MultiReg
+      (enum
+       (Empty)
+       (One (a Reg))
+       (Two (a Reg) (b Reg))
+       (Three (a Reg) (b Reg) (c Reg))
+       (Four (a Reg) (b Reg) (c Reg) (d Reg))))
+
+---
+
+(source
+  (type
+    (ident)
+    (type_enum
+      (enum_variant (ident))
+      (enum_variant (ident))))
+  (type
+    (ident)
+    (type_enum
+      (enum_variant (ident))
+      (enum_variant (ident))))
+  (type
+    (ident)
+    (type_enum
+      (enum_variant (ident))
+      (enum_variant (ident) (variant_field (ident) (ty)))
+      (enum_variant (ident) (variant_field (ident) (ty))
+                            (variant_field (ident) (ty)))
+      (enum_variant (ident) (variant_field (ident) (ty))
+                            (variant_field (ident) (ty))
+                            (variant_field (ident) (ty)))
+      (enum_variant (ident) (variant_field (ident) (ty))
+                            (variant_field (ident) (ty))
+                            (variant_field (ident) (ty))
+                            (variant_field (ident) (ty))))))
+
+================================
+decl
+================================
+
+(decl multi simplify (Value) Value)
+(decl multi inst_data (Type InstructionData) Value)
+
+(decl partial lower (Inst) InstOutput)
+
+(decl pure u64_as_i64 (u64) i64)
+(decl pure partial u8_try_from_u64 (u64) u8)
+
+(decl value_regs_invalid () ValueRegs)
+(decl multi_reg_to_single (MultiReg) InstOutput)
+(decl add_range_fact (Reg u16 u64 u64) Reg)
+
+---
+
+(source
+  (decl
+    (ident)
+    (param_types (ty))
+    (ty))
+  (decl
+    (ident)
+    (param_types (ty) (ty))
+    (ty))
+  (decl
+    (ident)
+    (param_types (ty))
+    (ty))
+  (decl
+    (ident)
+    (param_types (ty))
+    (ty))
+  (decl
+    (ident)
+    (param_types (ty))
+    (ty))
+  (decl
+    (ident)
+    (param_types)
+    (ty))
+  (decl
+    (ident)
+    (param_types (ty))
+    (ty))
+  (decl
+    (ident)
+    (param_types (ty) (ty) (ty) (ty))
+    (ty)))
+
+================================
+rule
+================================
+
+(rule operand_size_32 1 (operand_size (fits_in_32 _ty)) (OperandSize.Size32))
+(rule operand_size_64 (operand_size (fits_in_64 _ty)) (OperandSize.Size64))
+
+(rule 1 (lane_size (multi_lane 32 _)) (ScalarSize.Size32))
+(rule 1 (put_in_reg_sext64 val @ (value_type (fits_in_32 ty)))
+      (extend val true (ty_bits ty) 64))
+
+(rule (eq ty x y) (icmp ty (IntCC.Equal) x y))
+
+(rule 1 (mov_to_fpu x (ScalarSize.Size16))
+        (if-let false (use_fp16))
+        (mov_to_fpu x (ScalarSize.Size32)))
+
+(rule (lower (isplit x @ (value_type $I128)))
+  (let ((lo XReg (value_regs_get x 0))
+        (hi XReg (value_regs_get x 1)))
+    (output_pair lo hi)))
+
+(rule (vec_cmp rn rm ty (Cond.Vc))
+      (if (ty_vector_float ty))
+      (vec_cmp_vc rn rm (vector_size ty)))
+
+---
+
+(source
+  (rule
+    (ident)
+    (int)
+    (pattern_term
+      (ident)
+      (pattern_term
+        (ident) (ident)))
+    (expr_term
+      (ident)))
+  (rule
+    (ident)
+    (pattern_term
+      (ident)
+      (pattern_term
+        (ident) (ident)))
+    (expr_term
+      (ident)))
+  (rule
+    (int)
+    (pattern_term
+      (ident)
+      (pattern_term
+        (ident) (int) (wildcard)))
+    (expr_term
+      (ident)))
+  (rule
+    (int)
+    (pattern_term
+      (ident)
+      (pattern_bind
+        (ident)
+        (pattern_term
+          (ident)
+          (pattern_term
+            (ident) (ident)))))
+    (expr_term
+      (ident)
+      (ident)
+      (bool)
+      (expr_term
+        (ident) (ident))
+      (int)))
+  (rule
+    (pattern_term
+      (ident) (ident) (ident) (ident))
+    (expr_term
+      (ident)
+      (ident)
+      (expr_term (ident))
+      (ident)
+      (ident)))
+  (rule
+    (int)
+    (pattern_term
+      (ident)
+      (ident)
+      (pattern_term (ident)))
+    (if_let
+      (bool)
+      (expr_term (ident)))
+    (expr_term
+      (ident)
+      (ident)
+      (expr_term (ident))))
+  (rule
+    (pattern_term
+      (ident)
+      (pattern_term
+        (ident)
+        (pattern_bind
+          (ident)
+          (pattern_term
+            (ident) (const_ident)))))
+    (let
+      (let_binding
+        (ident)
+        (ty)
+        (expr_term
+          (ident) (ident) (int)))
+      (let_binding
+        (ident)
+        (ty)
+        (expr_term
+          (ident) (ident) (int)))
+      (expr_term
+        (ident) (ident) (ident))))
+  (rule
+    (pattern_term
+      (ident)
+      (ident)
+      (ident)
+      (ident)
+      (pattern_term (ident)))
+    (if
+      (expr_term
+        (ident) (ident)))
+    (expr_term
+      (ident)
+      (ident)
+      (ident)
+      (expr_term
+        (ident) (ident)))))
+
+================================
+extern & extractor
+================================
+
+(extern const $I64 Type)
+(extern const $I64X2 Type)
+
+(decl value_regs (Reg Reg) ValueRegs)
+(extern constructor value_regs value_regs)
+
+(extern constructor invalid_reg invalid_reg)
+(extractor (invalid_reg) (is_valid_reg false))
+
+(decl value_list_slice (ValueSlice) ValueList)
+(extern extractor infallible value_list_slice value_list_slice)
+
+(decl valid_reg (Reg) Reg)
+(extractor (valid_reg reg) (and (is_valid_reg true) reg))
+
+---
+
+(source
+  (extern_const
+    (const_ident) (ty))
+  (extern_const
+    (const_ident) (ty))
+  (decl
+    (ident)
+    (param_types (ty) (ty))
+    (ty))
+  (extern_constructor
+    (ident) (ident))
+  (extern_constructor
+    (ident) (ident))
+  (extractor
+    (ident)
+    (pattern_term
+      (ident) (bool)))
+  (decl
+    (ident)
+    (param_types (ty))
+    (ty))
+  (extern_extractor
+    (ident) (ident))
+  (decl
+    (ident)
+    (param_types (ty))
+    (ty))
+  (extractor
+    (ident)
+    (ident)
+    (pattern_and
+      (pattern_term
+        (ident) (bool))
+      (ident))))
+
+================================
+convert
+================================
+
+(convert Value Reg put_in_reg)
+(convert Value ValueRegs put_in_regs)
+
+---
+
+(source
+  (convert (ty) (ty) (ident))
+  (convert (ty) (ty) (ident)))
+
