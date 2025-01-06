@@ -1,0 +1,230 @@
+=================
+type: no body
+:error
+=================
+(type T)
+---
+
+=================
+type: numeric name
+:error
+=================
+(type 123 (enum A B))
+---
+
+=================
+type: invalid modifiers
+:error
+=================
+(type T extern primitive)
+---
+
+=================
+type: invalid enum variant field
+:error
+=================
+(type T (enum (A 123)))
+---
+
+=================
+type: incomplete enum field
+:error
+=================
+(type T (enum (A (x))))
+---
+
+=================
+type: malformed enum field
+:error
+=================
+(type T (enum (A (x Int y))))
+---
+
+=================
+decl: only modifier
+:error
+=================
+(decl pure)
+---
+
+=================
+decl: no types
+:error
+=================
+(decl foo)
+---
+
+=================
+decl: empty types
+:error
+=================
+(decl foo () ())
+---
+
+=================
+decl: only identifier
+:error
+=================
+(decl pure multi partial foo)
+---
+
+=================
+decl: numeric name
+:error
+=================
+(decl 123 (Int) Int)
+---
+
+=================
+decl: numeric param type
+:error
+=================
+(decl foo (123) Int)
+---
+
+=================
+rule: only priority
+:error
+=================
+(rule 1)
+---
+
+=================
+rule: only name
+:error
+=================
+(rule name)
+---
+
+=================
+rule: name and priority
+:error
+=================
+(rule name 1)
+---
+
+=================
+rule: priority and pattern
+:error
+=================
+(rule 1 pattern)
+---
+
+=================
+rule: only pattern
+:error
+=================
+(rule (pattern))
+---
+
+=================
+rule: extra
+:error
+=================
+(rule 1 (pattern) (result) extra)
+---
+
+=================
+rule: invalid priority
+:error
+=================
+(rule abc "not_an_int" pattern result)
+---
+
+=================
+extractor: missing template
+:error
+=================
+(extractor (term x y))
+---
+
+=================
+extractor: numeric term
+:error
+=================
+(extractor (123 x y) pattern)
+---
+
+=================
+extractor: numeric param
+:error
+=================
+(extractor (term 123 y) pattern)
+---
+
+=================
+extractor: malformed params
+:error
+=================
+(extractor term x y pattern)
+---
+
+=================
+extern: invalid kind
+:error
+=================
+(extern invalid $const Int)
+---
+
+=================
+extern: const missing type
+:error
+=================
+(extern const $const)
+---
+
+=================
+extern: const invalid name
+:error
+=================
+(extern const const Int)
+---
+
+=================
+extern: constructor missing function
+:error
+=================
+(extern constructor term)
+---
+
+=================
+extern: constructor invalid term
+:error
+=================
+(extern constructor 123 func)
+---
+
+=================
+extern: extractor missing function
+:error
+=================
+(extern extractor term)
+---
+
+=================
+extern: extractor invalid modifier
+:error
+=================
+(extern extractor invalid term func)
+---
+
+=================
+convert: missing term
+:error
+=================
+(convert Int Int)
+---
+
+=================
+convert: numeric term
+:error
+=================
+(convert Int Int 123)
+---
+
+=================
+convert: numeric type
+:error
+=================
+(convert 123 Int term)
+---
