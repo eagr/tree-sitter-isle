@@ -1,0 +1,97 @@
+(type U6 (primitive U6))
+;                   ^ type
+;         ^ function.builtin
+;     ^ type
+; ^ function.builtin
+; <- punctuation.bracket
+
+(type VecMask extern (enum))
+;                     ^ function.builtin
+;             ^ keyword
+;     ^ type
+
+(type MInst nodebug
+;           ^ keyword
+;     ^ type
+      (enum
+;      ^ function.builtin
+       (Nop (len u8))))
+;                ^ type
+;            ^ variable.member
+;       ^ type
+
+(decl pure partial zero_value (Value) Value)
+;                                     ^ type
+;                              ^ type
+;                  ^ function
+;          ^ keyword
+;      ^ keyword
+; ^ function.builtin
+
+(rule operand_size_32 1 (operand_size (fits_in_32 _ty)) (OperandSize.Size32))
+;                                                        ^ type
+;                     ^ number
+; ^ function.builtin
+
+(rule 0 (iconst_u ty rule)
+;                    ^ variable
+;     ^ number
+	(if-let true (u64_le c (ty_umax ty)))
+;         ^ constant.builtin
+;  ^ function.builtin
+    (iconst ty (imm64 c)))
+
+(rule 1 (aarch64_link)
+      (if (preserve_frame_pointers))
+;      ^ function.builtin
+      (if (sign_return_address_disabled))
+;      ^ function.builtin
+      (let ((dst WritableReg (temp_writable_reg $I64))
+;                                               ^ constant
+;      ^ function.builtin
+           (addr AMode (AMode.FPOffset 8))
+;                                      ^ number
+           (_ Unit (emit (MInst.ULoad64 dst addr (mem_flags_trusted)))))
+;                         ^ type
+           dst))
+
+(extractor (valid_reg extractor) (and (is_valid_reg true) reg))
+;                                                         ^ variable
+;                                                   ^ constant.builtin
+;                                 ^ function.builtin
+;                     ^ variable
+; ^ function.builtin
+
+(extern const $F64X2 Type)
+;                    ^ type
+;             ^ constant
+;       ^ keyword
+; ^ function.builtin
+
+(extern constructor extern extern)
+;                          ^ function
+;                   ^ function
+;       ^ keyword
+; ^ function.builtin
+
+(decl is_valid_reg (bool) Reg)
+;                   ^ type
+;     ^ function
+(extern extractor infallible is_valid_reg is_valid_reg)
+;                                         ^ function
+;                            ^ function
+;                 ^ keyword
+;        ^ keyword
+; ^ function.builtin
+
+(convert Value Reg put_in_reg)
+;                  ^ function
+;              ^ type
+;        ^ type
+; ^ function.builtin
+
+(convert u8 u32 u8_as_u32)
+;               ^ function
+;           ^ type
+;        ^ type
+; ^ function.builtin
