@@ -148,7 +148,7 @@ module.exports = grammar({
     type_enum: $ => seq(
       '(',
       'enum',
-      field('variants', repeat($.enum_variant)),
+      field('variants', repeat1($.enum_variant)),
       ')',
     ),
 

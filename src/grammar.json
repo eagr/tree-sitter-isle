@@ -497,7 +497,7 @@
           "type": "FIELD",
           "name": "variants",
           "content": {
-            "type": "REPEAT",
+            "type": "REPEAT1",
             "content": {
               "type": "SYMBOL",
               "name": "enum_variant"

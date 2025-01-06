@@ -838,7 +838,7 @@
     "fields": {
       "variants": {
         "multiple": true,
-        "required": false,
+        "required": true,
         "types": [
           {
             "type": "enum_variant",
