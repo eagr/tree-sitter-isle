@@ -37,6 +37,16 @@
           }
         ]
       },
+      "op": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "convert",
+            "named": false
+          }
+        ]
+      },
       "outer": {
         "multiple": false,
         "required": true,
@@ -63,6 +73,46 @@
     "type": "decl",
     "named": true,
     "fields": {
+      "modifier_multi": {
+        "multiple": false,
+        "required": false,
+        "types": [
+          {
+            "type": "multi",
+            "named": false
+          }
+        ]
+      },
+      "modifier_partial": {
+        "multiple": false,
+        "required": false,
+        "types": [
+          {
+            "type": "partial",
+            "named": false
+          }
+        ]
+      },
+      "modifier_pure": {
+        "multiple": false,
+        "required": false,
+        "types": [
+          {
+            "type": "pure",
+            "named": false
+          }
+        ]
+      },
+      "op": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "decl",
+            "named": false
+          }
+        ]
+      },
       "param_types": {
         "multiple": false,
         "required": true,
@@ -180,7 +230,17 @@
           }
         ]
       },
-      "ty": {
+      "op": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "extern",
+            "named": false
+          }
+        ]
+      },
+      "type": {
         "multiple": false,
         "required": true,
         "types": [
@@ -212,6 +272,16 @@
         "types": [
           {
             "type": "constructor",
+            "named": false
+          }
+        ]
+      },
+      "op": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "extern",
             "named": false
           }
         ]
@@ -262,6 +332,16 @@
           }
         ]
       },
+      "op": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "extern",
+            "named": false
+          }
+        ]
+      },
       "term": {
         "multiple": false,
         "required": true,
@@ -278,6 +358,16 @@
     "type": "extractor",
     "named": true,
     "fields": {
+      "op": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "extractor",
+            "named": false
+          }
+        ]
+      },
       "params": {
         "multiple": true,
         "required": false,
@@ -341,7 +431,18 @@
   {
     "type": "if",
     "named": true,
-    "fields": {},
+    "fields": {
+      "op": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "if",
+            "named": false
+          }
+        ]
+      }
+    },
     "children": {
       "multiple": false,
       "required": true,
@@ -376,7 +477,18 @@
   {
     "type": "if_let",
     "named": true,
-    "fields": {},
+    "fields": {
+      "op": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "if-let",
+            "named": false
+          }
+        ]
+      }
+    },
     "children": {
       "multiple": true,
       "required": true,
@@ -480,6 +592,16 @@
             "named": true
           }
         ]
+      },
+      "op": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "let",
+            "named": false
+          }
+        ]
       }
     }
   },
@@ -540,7 +662,18 @@
   {
     "type": "pattern_and",
     "named": true,
-    "fields": {},
+    "fields": {
+      "op": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "and",
+            "named": false
+          }
+        ]
+      }
+    },
     "children": {
       "multiple": true,
       "required": false,
@@ -669,7 +802,18 @@
   {
     "type": "pragma",
     "named": true,
-    "fields": {},
+    "fields": {
+      "op": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "pragma",
+            "named": false
+          }
+        ]
+      }
+    },
     "children": {
       "multiple": false,
       "required": true,
@@ -692,6 +836,16 @@
           {
             "type": "ident",
             "named": true
+          }
+        ]
+      },
+      "op": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "rule",
+            "named": false
           }
         ]
       },
@@ -820,6 +974,20 @@
           }
         ]
       },
+      "modifier": {
+        "multiple": false,
+        "required": false,
+        "types": [
+          {
+            "type": "extern",
+            "named": false
+          },
+          {
+            "type": "nodebug",
+            "named": false
+          }
+        ]
+      },
       "name": {
         "multiple": false,
         "required": true,
@@ -829,6 +997,16 @@
             "named": true
           }
         ]
+      },
+      "op": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "type",
+            "named": false
+          }
+        ]
       }
     }
   },
@@ -836,9 +1014,19 @@
     "type": "type_enum",
     "named": true,
     "fields": {
+      "op": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "enum",
+            "named": false
+          }
+        ]
+      },
       "variants": {
         "multiple": true,
-        "required": true,
+        "required": false,
         "types": [
           {
             "type": "enum_variant",
@@ -861,26 +1049,43 @@
             "named": true
           }
         ]
+      },
+      "op": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "primitive",
+            "named": false
+          }
+        ]
       }
     }
   },
   {
     "type": "variant_field",
     "named": true,
-    "fields": {},
-    "children": {
-      "multiple": true,
-      "required": true,
-      "types": [
-        {
-          "type": "ident",
-          "named": true
-        },
-        {
-          "type": "ty",
-          "named": true
-        }
-      ]
+    "fields": {
+      "name": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "ident",
+            "named": true
+          }
+        ]
+      },
+      "type": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "ty",
+            "named": true
+          }
+        ]
+      }
     }
   },
   {

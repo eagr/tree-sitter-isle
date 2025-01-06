@@ -106,8 +106,12 @@
           "value": "("
         },
         {
-          "type": "STRING",
-          "value": "if-let"
+          "type": "FIELD",
+          "name": "op",
+          "content": {
+            "type": "STRING",
+            "value": "if-let"
+          }
         },
         {
           "type": "SYMBOL",
@@ -131,8 +135,12 @@
           "value": "("
         },
         {
-          "type": "STRING",
-          "value": "if"
+          "type": "FIELD",
+          "name": "op",
+          "content": {
+            "type": "STRING",
+            "value": "if"
+          }
         },
         {
           "type": "SYMBOL",
@@ -152,8 +160,12 @@
           "value": "("
         },
         {
-          "type": "STRING",
-          "value": "let"
+          "type": "FIELD",
+          "name": "op",
+          "content": {
+            "type": "STRING",
+            "value": "let"
+          }
         },
         {
           "type": "FIELD",
@@ -280,8 +292,12 @@
           "value": "("
         },
         {
-          "type": "STRING",
-          "value": "and"
+          "type": "FIELD",
+          "name": "op",
+          "content": {
+            "type": "STRING",
+            "value": "and"
+          }
         },
         {
           "type": "REPEAT",
@@ -381,8 +397,12 @@
           "value": "("
         },
         {
-          "type": "STRING",
-          "value": "pragma"
+          "type": "FIELD",
+          "name": "op",
+          "content": {
+            "type": "STRING",
+            "value": "pragma"
+          }
         },
         {
           "type": "SYMBOL",
@@ -402,8 +422,12 @@
           "value": "("
         },
         {
-          "type": "STRING",
-          "value": "type"
+          "type": "FIELD",
+          "name": "op",
+          "content": {
+            "type": "STRING",
+            "value": "type"
+          }
         },
         {
           "type": "FIELD",
@@ -414,25 +438,29 @@
           }
         },
         {
-          "type": "CHOICE",
-          "members": [
-            {
-              "type": "CHOICE",
-              "members": [
-                {
-                  "type": "STRING",
-                  "value": "extern"
-                },
-                {
-                  "type": "STRING",
-                  "value": "nodebug"
-                }
-              ]
-            },
-            {
-              "type": "BLANK"
-            }
-          ]
+          "type": "FIELD",
+          "name": "modifier",
+          "content": {
+            "type": "CHOICE",
+            "members": [
+              {
+                "type": "CHOICE",
+                "members": [
+                  {
+                    "type": "STRING",
+                    "value": "extern"
+                  },
+                  {
+                    "type": "STRING",
+                    "value": "nodebug"
+                  }
+                ]
+              },
+              {
+                "type": "BLANK"
+              }
+            ]
+          }
         },
         {
           "type": "FIELD",
@@ -465,8 +493,12 @@
           "value": "("
         },
         {
-          "type": "STRING",
-          "value": "primitive"
+          "type": "FIELD",
+          "name": "op",
+          "content": {
+            "type": "STRING",
+            "value": "primitive"
+          }
         },
         {
           "type": "FIELD",
@@ -490,14 +522,18 @@
           "value": "("
         },
         {
-          "type": "STRING",
-          "value": "enum"
+          "type": "FIELD",
+          "name": "op",
+          "content": {
+            "type": "STRING",
+            "value": "enum"
+          }
         },
         {
           "type": "FIELD",
           "name": "variants",
           "content": {
-            "type": "REPEAT1",
+            "type": "REPEAT",
             "content": {
               "type": "SYMBOL",
               "name": "enum_variant"
@@ -559,12 +595,20 @@
           "value": "("
         },
         {
-          "type": "SYMBOL",
-          "name": "ident"
+          "type": "FIELD",
+          "name": "name",
+          "content": {
+            "type": "SYMBOL",
+            "name": "ident"
+          }
         },
         {
-          "type": "SYMBOL",
-          "name": "ty"
+          "type": "FIELD",
+          "name": "type",
+          "content": {
+            "type": "SYMBOL",
+            "name": "ty"
+          }
         },
         {
           "type": "STRING",
@@ -580,44 +624,60 @@
           "value": "("
         },
         {
-          "type": "STRING",
-          "value": "decl"
+          "type": "FIELD",
+          "name": "op",
+          "content": {
+            "type": "STRING",
+            "value": "decl"
+          }
         },
         {
-          "type": "CHOICE",
-          "members": [
-            {
-              "type": "STRING",
-              "value": "pure"
-            },
-            {
-              "type": "BLANK"
-            }
-          ]
+          "type": "FIELD",
+          "name": "modifier_pure",
+          "content": {
+            "type": "CHOICE",
+            "members": [
+              {
+                "type": "STRING",
+                "value": "pure"
+              },
+              {
+                "type": "BLANK"
+              }
+            ]
+          }
         },
         {
-          "type": "CHOICE",
-          "members": [
-            {
-              "type": "STRING",
-              "value": "multi"
-            },
-            {
-              "type": "BLANK"
-            }
-          ]
+          "type": "FIELD",
+          "name": "modifier_multi",
+          "content": {
+            "type": "CHOICE",
+            "members": [
+              {
+                "type": "STRING",
+                "value": "multi"
+              },
+              {
+                "type": "BLANK"
+              }
+            ]
+          }
         },
         {
-          "type": "CHOICE",
-          "members": [
-            {
-              "type": "STRING",
-              "value": "partial"
-            },
-            {
-              "type": "BLANK"
-            }
-          ]
+          "type": "FIELD",
+          "name": "modifier_partial",
+          "content": {
+            "type": "CHOICE",
+            "members": [
+              {
+                "type": "STRING",
+                "value": "partial"
+              },
+              {
+                "type": "BLANK"
+              }
+            ]
+          }
         },
         {
           "type": "FIELD",
@@ -677,8 +737,12 @@
           "value": "("
         },
         {
-          "type": "STRING",
-          "value": "rule"
+          "type": "FIELD",
+          "name": "op",
+          "content": {
+            "type": "STRING",
+            "value": "rule"
+          }
         },
         {
           "type": "FIELD",
@@ -750,8 +814,12 @@
           "value": "("
         },
         {
-          "type": "STRING",
-          "value": "extractor"
+          "type": "FIELD",
+          "name": "op",
+          "content": {
+            "type": "STRING",
+            "value": "extractor"
+          }
         },
         {
           "type": "STRING",
@@ -802,10 +870,6 @@
           "value": "("
         },
         {
-          "type": "STRING",
-          "value": "extern"
-        },
-        {
           "type": "CHOICE",
           "members": [
             {
@@ -833,6 +897,14 @@
       "members": [
         {
           "type": "FIELD",
+          "name": "op",
+          "content": {
+            "type": "STRING",
+            "value": "extern"
+          }
+        },
+        {
+          "type": "FIELD",
           "name": "kind",
           "content": {
             "type": "STRING",
@@ -849,7 +921,7 @@
         },
         {
           "type": "FIELD",
-          "name": "ty",
+          "name": "type",
           "content": {
             "type": "SYMBOL",
             "name": "ty"
@@ -860,6 +932,14 @@
     "extern_constructor": {
       "type": "SEQ",
       "members": [
+        {
+          "type": "FIELD",
+          "name": "op",
+          "content": {
+            "type": "STRING",
+            "value": "extern"
+          }
+        },
         {
           "type": "FIELD",
           "name": "kind",
@@ -889,6 +969,14 @@
     "extern_extractor": {
       "type": "SEQ",
       "members": [
+        {
+          "type": "FIELD",
+          "name": "op",
+          "content": {
+            "type": "STRING",
+            "value": "extern"
+          }
+        },
         {
           "type": "FIELD",
           "name": "kind",
@@ -939,8 +1027,12 @@
           "value": "("
         },
         {
-          "type": "STRING",
-          "value": "convert"
+          "type": "FIELD",
+          "name": "op",
+          "content": {
+            "type": "STRING",
+            "value": "convert"
+          }
         },
         {
           "type": "FIELD",
