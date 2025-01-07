@@ -1,12 +1,12 @@
 (type U6 (primitive U6))
 ;                   ^ type
-;         ^ function.builtin
+;         ^ keyword
 ;     ^ type
-; ^ function.builtin
+; ^ keyword
 ; <- punctuation.bracket
 
 (type VecMask extern (enum))
-;                     ^ function.builtin
+;                     ^ keyword
 ;             ^ keyword
 ;     ^ type
 
@@ -14,11 +14,11 @@
 ;           ^ keyword
 ;     ^ type
       (enum
-;      ^ function.builtin
+;      ^ keyword
        (Nop (len u8))))
 ;                ^ type
-;            ^ variable.member
-;       ^ type
+;            ^ property
+;       ^ constant
 
 (decl pure partial zero_value (Value) Value)
 ;                                     ^ type
@@ -26,29 +26,30 @@
 ;                  ^ function
 ;          ^ keyword
 ;      ^ keyword
-; ^ function.builtin
+; ^ keyword
 
-(rule operand_size_32 1 (operand_size (fits_in_32 _ty)) (OperandSize.Size32))
+(rule operand_size_32 1 (operand_size (fits_in_32 _)) (OperandSize.Size32))
 ;                                                        ^ type
+;                                                 ^ keyword
 ;                     ^ number
-; ^ function.builtin
+; ^ keyword
 
 (rule 0 (iconst_u ty rule)
 ;                    ^ variable
 ;     ^ number
-	(if-let true (u64_le c (ty_umax ty)))
-;         ^ constant.builtin
-;  ^ function.builtin
-    (iconst ty (imm64 c)))
+      (if-let true (u64_le c (ty_umax ty)))
+;             ^ boolean
+;      ^ keyword
+      (iconst ty (imm64 c)))
 
 (rule 1 (aarch64_link)
       (if (preserve_frame_pointers))
-;      ^ function.builtin
+;      ^ keyword
       (if (sign_return_address_disabled))
-;      ^ function.builtin
+;      ^ keyword
       (let ((dst WritableReg (temp_writable_reg $I64))
 ;                                               ^ constant
-;      ^ function.builtin
+;      ^ keyword
            (addr AMode (AMode.FPOffset 8))
 ;                                      ^ number
            (_ Unit (emit (MInst.ULoad64 dst addr (mem_flags_trusted)))))
@@ -57,22 +58,22 @@
 
 (extractor (valid_reg extractor) (and (is_valid_reg true) reg))
 ;                                                         ^ variable
-;                                                   ^ constant.builtin
-;                                 ^ function.builtin
+;                                                   ^ boolean
+;                                 ^ keyword
 ;                     ^ variable
-; ^ function.builtin
+; ^ keyword
 
 (extern const $F64X2 Type)
 ;                    ^ type
 ;             ^ constant
 ;       ^ keyword
-; ^ function.builtin
+; ^ keyword
 
 (extern constructor extern extern)
 ;                          ^ function
 ;                   ^ function
 ;       ^ keyword
-; ^ function.builtin
+; ^ keyword
 
 (decl is_valid_reg (bool) Reg)
 ;                   ^ type
@@ -82,16 +83,16 @@
 ;                            ^ function
 ;                 ^ keyword
 ;        ^ keyword
-; ^ function.builtin
+; ^ keyword
 
 (convert Value Reg put_in_reg)
 ;                  ^ function
 ;              ^ type
 ;        ^ type
-; ^ function.builtin
+; ^ keyword
 
 (convert u8 u32 u8_as_u32)
 ;               ^ function
 ;           ^ type
 ;        ^ type
-; ^ function.builtin
+; ^ keyword
