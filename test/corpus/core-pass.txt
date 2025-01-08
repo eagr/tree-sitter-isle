@@ -66,35 +66,35 @@ decl
 (source
   (decl
     (ident)
-    (param_types (ty))
+    (decl_params (ty))
     (ty))
   (decl
     (ident)
-    (param_types (ty) (ty))
+    (decl_params (ty) (ty))
     (ty))
   (decl
     (ident)
-    (param_types (ty))
+    (decl_params (ty))
     (ty))
   (decl
     (ident)
-    (param_types (ty))
+    (decl_params (ty))
     (ty))
   (decl
     (ident)
-    (param_types (ty))
+    (decl_params (ty))
     (ty))
   (decl
     (ident)
-    (param_types)
+    (decl_params)
     (ty))
   (decl
     (ident)
-    (param_types (ty))
+    (decl_params (ty))
     (ty))
   (decl
     (ident)
-    (param_types (ty) (ty) (ty) (ty))
+    (decl_params (ty) (ty) (ty) (ty))
     (ty)))
 
 ================================
@@ -257,7 +257,7 @@ extern & extractor
     (const_ident) (ty))
   (decl
     (ident)
-    (param_types (ty) (ty))
+    (decl_params (ty) (ty))
     (ty))
   (extern_constructor
     (ident) (ident))
@@ -269,13 +269,13 @@ extern & extractor
       (ident) (bool)))
   (decl
     (ident)
-    (param_types (ty))
+    (decl_params (ty))
     (ty))
   (extern_extractor
     (ident) (ident))
   (decl
     (ident)
-    (param_types (ty))
+    (decl_params (ty))
     (ty))
   (extractor
     (ident)

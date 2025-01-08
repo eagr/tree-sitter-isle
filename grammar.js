@@ -176,7 +176,7 @@ module.exports = grammar({
     variant_field: $ => seq(
       '(',
       field('name', $.ident),
-      field('type', $.ty),
+      field('ty', $.ty),
       ')',
     ),
 
@@ -190,12 +190,12 @@ module.exports = grammar({
       field('modifier_multi', optional('multi')),
       field('modifier_partial', optional('partial')),
       field('term', $.ident),
-      field('param_types', $.param_types),
-      field('ret_type', $.ty),
+      field('params', $.decl_params),
+      field('ret', $.ty),
       ')',
     ),
 
-    param_types: $ => seq(
+    decl_params: $ => seq(
       '(',
       repeat($.ty),
       ')',
@@ -246,7 +246,7 @@ module.exports = grammar({
       field('op', 'extern'),
       field('kind', 'const'),
       field('name', $.const_ident),
-      field('type', $.ty),
+      field('ty', $.ty),
     ),
 
     extern_constructor: $ => seq(
@@ -277,14 +277,14 @@ module.exports = grammar({
 
     // ;;;; comment ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-    comment: _ => choice(
-      _.line_comment,
-      _.block_comment,
+    comment: $ => choice(
+      $.line_comment,
+      $.block_comment,
     ),
 
-    line_comment: _ => token(seq(';', /[^\r\n]*/)),
+    line_comment: $ => token(/;[^\r\n]*/),
 
-    block_comment: _ => token(seq(
+    block_comment: $ => token(seq(
       '(;',
       /[^;]*;+([^\(;][^;]*;+)*/,
       ')',

@@ -69,12 +69,6 @@
 ;       ^ keyword
 ; ^ keyword
 
-(extern constructor extern extern)
-;                          ^ function
-;                   ^ function
-;       ^ keyword
-; ^ keyword
-
 (decl is_valid_reg (bool) Reg)
 ;                   ^ type
 ;     ^ function
@@ -83,6 +77,18 @@
 ;                            ^ function
 ;                 ^ keyword
 ;        ^ keyword
+; ^ keyword
+
+(decl value_regs (Reg Reg) ValueRegs)
+;                          ^ type
+;                     ^ type
+;                 ^ type
+;     ^ function
+; ^ keyword
+(extern constructor value_regs value_regs)
+;                              ^function
+;                   ^ function
+;       ^ keyword
 ; ^ keyword
 
 (convert Value Reg put_in_reg)

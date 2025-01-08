@@ -113,17 +113,17 @@
           }
         ]
       },
-      "param_types": {
+      "params": {
         "multiple": false,
         "required": true,
         "types": [
           {
-            "type": "param_types",
+            "type": "decl_params",
             "named": true
           }
         ]
       },
-      "ret_type": {
+      "ret": {
         "multiple": false,
         "required": true,
         "types": [
@@ -143,6 +143,21 @@
           }
         ]
       }
+    }
+  },
+  {
+    "type": "decl_params",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": false,
+      "types": [
+        {
+          "type": "ty",
+          "named": true
+        }
+      ]
     }
   },
   {
@@ -240,7 +255,7 @@
           }
         ]
       },
-      "type": {
+      "ty": {
         "multiple": false,
         "required": true,
         "types": [
@@ -637,21 +652,6 @@
           "type": "let",
           "named": true
         },
-        {
-          "type": "ty",
-          "named": true
-        }
-      ]
-    }
-  },
-  {
-    "type": "param_types",
-    "named": true,
-    "fields": {},
-    "children": {
-      "multiple": true,
-      "required": false,
-      "types": [
         {
           "type": "ty",
           "named": true
@@ -1076,7 +1076,7 @@
           }
         ]
       },
-      "type": {
+      "ty": {
         "multiple": false,
         "required": true,
         "types": [
