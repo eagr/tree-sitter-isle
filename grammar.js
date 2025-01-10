@@ -277,17 +277,9 @@ module.exports = grammar({
 
     // ;;;; comment ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-    comment: $ => choice(
-      $.line_comment,
-      $.block_comment,
-    ),
-
-    line_comment: $ => token(/;[^\r\n]*/),
-
-    block_comment: $ => token(seq(
-      '(;',
-      /[^;]*;+([^\(;][^;]*;+)*/,
-      ')',
+    comment: $ => token(choice(
+      /;[^\r\n]*/,
+      /\(;(?:[^;]|;+[^;)])*;+\)/,
     )),
   }
 });

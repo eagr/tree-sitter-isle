@@ -5,25 +5,6 @@
     "fields": {}
   },
   {
-    "type": "comment",
-    "named": true,
-    "fields": {},
-    "children": {
-      "multiple": false,
-      "required": true,
-      "types": [
-        {
-          "type": "block_comment",
-          "named": true
-        },
-        {
-          "type": "line_comment",
-          "named": true
-        }
-      ]
-    }
-  },
-  {
     "type": "convert",
     "named": true,
     "fields": {
@@ -1105,7 +1086,7 @@
     "named": false
   },
   {
-    "type": "block_comment",
+    "type": "comment",
     "named": true
   },
   {
@@ -1163,10 +1144,6 @@
   {
     "type": "let",
     "named": false
-  },
-  {
-    "type": "line_comment",
-    "named": true
   },
   {
     "type": "multi",

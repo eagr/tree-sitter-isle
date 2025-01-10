@@ -298,3 +298,105 @@ convert
   (convert (ty) (ty) (ident))
   (convert (ty) (ty) (ident)))
 
+================================
+line comment
+================================
+
+;
+;;
+;;;
+;;;; comment ;;;;;;;;;;;;;;;;;;;
+
+(type ExtType
+      (enum
+        (S)   ;  signed
+        (U))) ;; unsigned
+
+---
+
+(source
+  (comment)
+  (comment)
+  (comment)
+  (comment)
+  (type
+    (ident)
+    (type_enum
+      (enum_variant (ident))
+      (comment)
+      (enum_variant (ident))))
+  (comment))
+
+================================
+block comment
+================================
+
+(;;)
+(;;;)
+(;;;;)
+
+(;(;)
+(;((;)
+(;(((;)
+(;;(((;)
+
+(;);)
+(;));)
+(;)));)
+(;)));;)
+
+(;();)
+(;(();)
+(;());)
+(;(());)
+
+(;;a;)
+(;;;a;)
+(;;;a;;)
+(;;;a;;;)
+(;(a);)
+(;(aa);)
+(;(a;a);)
+(;(a;a);a;)
+
+(;
+;
+;)
+
+(;
+  comment
+;)
+
+---
+
+(source
+  (comment)
+  (comment)
+  (comment)
+
+  (comment)
+  (comment)
+  (comment)
+  (comment)
+
+  (comment)
+  (comment)
+  (comment)
+  (comment)
+
+  (comment)
+  (comment)
+  (comment)
+  (comment)
+
+  (comment)
+  (comment)
+  (comment)
+  (comment)
+  (comment)
+  (comment)
+  (comment)
+  (comment)
+
+  (comment)
+  (comment))
