@@ -382,14 +382,14 @@ module.exports = grammar({
     model_enum: $ => seq(
       '(',
       'enum',
-      repeat($.model_variant),
+      repeat($.model_enum_variant),
       ')',
     ),
 
-    model_variant: $ => seq(
+    model_enum_variant: $ => seq(
       '(',
       field('name', $.ident),
-      field('val', optional($.bv_const)),
+      field('val', optional($._spec_expr)),
       ')',
     ),
 

@@ -26,8 +26,8 @@
 <model> ::= <ty> (<model_type> | <model_enum>)
 <model_type> ::= "(" "type" (<model_ty> | <bv_ty>) ")"
 <model_ty> ::= "Bool" | "Int" | "Unit"
-<model_enum> ::= "(" "enum" <model_variant>* ")"
-<model_variant> ::= "(" <ident> <spec_expr>? ")"
+<model_enum> ::= "(" "enum" <model_enum_variant>* ")"
+<model_enum_variant> ::= "(" <ident> <spec_expr>? ")"
 
 <form> ::= <ident> <sig>*
 

@@ -775,10 +775,64 @@
       "required": false,
       "types": [
         {
-          "type": "model_variant",
+          "type": "model_enum_variant",
           "named": true
         }
       ]
+    }
+  },
+  {
+    "type": "model_enum_variant",
+    "named": true,
+    "fields": {
+      "name": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "ident",
+            "named": true
+          }
+        ]
+      },
+      "val": {
+        "multiple": false,
+        "required": false,
+        "types": [
+          {
+            "type": "bool",
+            "named": true
+          },
+          {
+            "type": "bv_const",
+            "named": true
+          },
+          {
+            "type": "enum_variant",
+            "named": true
+          },
+          {
+            "type": "ident",
+            "named": true
+          },
+          {
+            "type": "int",
+            "named": true
+          },
+          {
+            "type": "spec_operation",
+            "named": true
+          },
+          {
+            "type": "switch",
+            "named": true
+          },
+          {
+            "type": "unit",
+            "named": true
+          }
+        ]
+      }
     }
   },
   {
@@ -814,32 +868,6 @@
           "named": true
         }
       ]
-    }
-  },
-  {
-    "type": "model_variant",
-    "named": true,
-    "fields": {
-      "name": {
-        "multiple": false,
-        "required": true,
-        "types": [
-          {
-            "type": "ident",
-            "named": true
-          }
-        ]
-      },
-      "val": {
-        "multiple": false,
-        "required": false,
-        "types": [
-          {
-            "type": "bv_const",
-            "named": true
-          }
-        ]
-      }
     }
   },
   {

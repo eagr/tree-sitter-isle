@@ -1435,7 +1435,7 @@
           "type": "REPEAT",
           "content": {
             "type": "SYMBOL",
-            "name": "model_variant"
+            "name": "model_enum_variant"
           }
         },
         {
@@ -1444,7 +1444,7 @@
         }
       ]
     },
-    "model_variant": {
+    "model_enum_variant": {
       "type": "SEQ",
       "members": [
         {
@@ -1467,7 +1467,7 @@
             "members": [
               {
                 "type": "SYMBOL",
-                "name": "bv_const"
+                "name": "_spec_expr"
               },
               {
                 "type": "BLANK"

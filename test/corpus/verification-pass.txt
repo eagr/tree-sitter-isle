@@ -63,15 +63,15 @@ model
   (model
     (ty)
     (model_enum
-      (model_variant (ident) (bv_const))
-      (model_variant (ident) (bv_const))))
+      (model_enum_variant (ident) (bv_const))
+      (model_enum_variant (ident) (bv_const))))
   (model
     (ty)
     (model_enum
-      (model_variant (ident) (bv_const))
-      (model_variant (ident) (bv_const))
-      (model_variant (ident) (bv_const))
-      (model_variant (ident) (bv_const)))))
+      (model_enum_variant (ident) (bv_const))
+      (model_enum_variant (ident) (bv_const))
+      (model_enum_variant (ident) (bv_const))
+      (model_enum_variant (ident) (bv_const)))))
 
 ================================
 form
