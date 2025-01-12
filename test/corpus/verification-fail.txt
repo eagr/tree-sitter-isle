@@ -1,0 +1,97 @@
+==================================
+model: invalid ty
+:error
+==================================
+(model M (type Float))
+---
+
+==================================
+model: missing name
+:error
+==================================
+(model (enum))
+---
+
+==================================
+model: invalid enum variant name
+:error
+==================================
+(model M (enum (123 true)))
+---
+
+==================================
+model: invalid enum variant value
+:error
+==================================
+(model M (enum (Variant 1 2)))
+---
+
+==================================
+form: missing name
+:error
+==================================
+(form ((args) (ret) (canon)))
+---
+
+==================================
+form: missing args
+:error
+==================================
+(form F ((ret) (canon)))
+---
+
+==================================
+form: missing ret
+:error
+==================================
+(form F ((args) (canon)))
+---
+
+==================================
+form: missing canon
+:error
+==================================
+(form F ((args) (ret)))
+---
+
+==================================
+spec: missing term identifier
+:error
+==================================
+(spec () (provide true))
+---
+
+==================================
+spec: missing provide
+:error
+==================================
+(spec (MySpec) (require))
+---
+
+==================================
+spec: invalid spec term
+:error
+==================================
+(spec MySpec x (provide 1.23))
+---
+
+==================================
+spec: invalid spec op
+:error
+==================================
+(spec (MySpec x) (provide (invalid_op true false)))
+---
+
+==================================
+instantiate: missing term
+:error
+==================================
+(instantiate)
+---
+
+==================================
+spec: invalid pair
+:error
+==================================
+(spec (Test x) (provide (switch true (1))))
+---

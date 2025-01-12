@@ -1,0 +1,268 @@
+================================
+model
+================================
+
+(model bool (type Bool))
+
+(model Type (type Int))
+(type Type (primitive Type))
+
+(type Unit (primitive Unit))
+(model Unit (type Unit))
+
+(model u8 (type (bv 8)))
+(model u16 (type (bv 16)))
+(model u32 (type (bv 32)))
+(model u64 (type (bv 64)))
+(model usize (type (bv)))
+
+(model ALUOp (enum
+  (Add #x00)
+  (Sub #x01)))
+
+(model ExtendOp (enum
+  (UXTB #b000)
+  (UXTH #b001)
+  (UXTW #b010)
+  (UXTX #b011)
+))
+
+---
+
+(source
+  (model
+    (ty)
+    (model_type (model_ty)))
+  (model
+    (ty)
+    (model_type (model_ty)))
+  (type
+    (ty)
+    (type_primitive (ty)))
+  (type
+    (ty)
+    (type_primitive (ty)))
+  (model
+    (ty)
+    (model_type (model_ty)))
+  (model
+    (ty)
+    (model_type (bv_ty (int))))
+  (model
+    (ty)
+    (model_type (bv_ty (int))))
+  (model
+    (ty)
+    (model_type (bv_ty (int))))
+  (model
+    (ty)
+    (model_type (bv_ty (int))))
+  (model
+    (ty)
+    (model_type (bv_ty)))
+  (model
+    (ty)
+    (model_enum
+      (model_variant (ident) (bv_const))
+      (model_variant (ident) (bv_const))))
+  (model
+    (ty)
+    (model_enum
+      (model_variant (ident) (bv_const))
+      (model_variant (ident) (bv_const))
+      (model_variant (ident) (bv_const))
+      (model_variant (ident) (bv_const)))))
+
+================================
+form
+================================
+
+(form
+  bv_unary_8_to_16
+  ((args (bv  8)) (ret (bv  8)) (canon (bv  8)))
+  ((args (bv 16)) (ret (bv 16)) (canon (bv 16)))
+)
+
+(form
+  bv_binary_8_to_16
+  ((args (bv  8) (bv  8)) (ret (bv  8)) (canon (bv  8)))
+  ((args (bv 16) (bv 16)) (ret (bv 16)) (canon (bv 16)))
+)
+
+(form
+  bv_ternary_8_to_16
+  ((args (bv  8) (bv  8) (bv  8)) (ret (bv  8)) (canon (bv  8)))
+  ((args (bv 16) (bv 16) (bv 16)) (ret (bv 16)) (canon (bv 16)))
+)
+
+---
+
+(source
+  (form
+    (ident)
+    (sig
+      (sig_args (bv_ty (int)))
+      (sig_ret (bv_ty (int)))
+      (sig_canon (bv_ty (int))))
+    (sig
+      (sig_args (bv_ty (int)))
+      (sig_ret (bv_ty (int)))
+      (sig_canon (bv_ty (int)))))
+  (form
+    (ident)
+    (sig
+      (sig_args (bv_ty (int)) (bv_ty (int)))
+      (sig_ret (bv_ty (int)))
+      (sig_canon (bv_ty (int))))
+    (sig
+      (sig_args (bv_ty (int)) (bv_ty (int)))
+      (sig_ret (bv_ty (int)))
+      (sig_canon (bv_ty (int)))))
+  (form
+    (ident)
+    (sig
+      (sig_args (bv_ty (int)) (bv_ty (int)) (bv_ty (int)))
+      (sig_ret (bv_ty (int)))
+      (sig_canon (bv_ty (int))))
+    (sig
+      (sig_args (bv_ty (int)) (bv_ty (int)) (bv_ty (int)))
+      (sig_ret (bv_ty (int)))
+      (sig_canon (bv_ty (int))))))
+
+================================
+spec
+================================
+
+(spec (zero_reg) (provide (= result #x0000000000000000)))
+
+(spec (vec_cnt x s)
+  (provide
+    (= result
+       (switch s
+         ((VectorSize.Size8x8)
+           (concat
+             (popcnt (extract 63 56 x))
+             (popcnt (extract 55 48 x))
+             (popcnt (extract 47 40 x))
+             (popcnt (extract 39 32 x))
+             (popcnt (extract 31 24 x))
+             (popcnt (extract 23 16 x))
+             (popcnt (extract 15  8 x))
+             (popcnt (extract 7   0 x))))
+         ((VectorSize.Size16x4) result)
+         ((VectorSize.Size32x2) result)))))
+
+---
+
+(source
+  (spec
+    (spec_term (ident))
+    (provide
+      (spec_operation
+        (ident)
+        (bv_const))))
+
+  (spec
+    (spec_term (ident) (ident) (ident))
+    (provide
+      (spec_operation
+        (ident)
+        (switch
+          (ident)
+          (spec_expr_pair
+            (enum_variant)
+            (spec_operation
+              (spec_operation
+                (spec_operation (int) (int) (ident)))
+              (spec_operation
+                (spec_operation (int) (int) (ident)))
+              (spec_operation
+                (spec_operation (int) (int) (ident)))
+              (spec_operation
+                (spec_operation (int) (int) (ident)))
+              (spec_operation
+                (spec_operation (int) (int) (ident)))
+              (spec_operation
+                (spec_operation (int) (int) (ident)))
+              (spec_operation
+                (spec_operation (int) (int) (ident)))
+              (spec_operation
+                (spec_operation (int) (int) (ident)))))
+          (spec_expr_pair (enum_variant) (ident))
+          (spec_expr_pair (enum_variant) (ident)))))))
+
+================================
+instantiate
+================================
+
+(spec (umax x y)
+    (provide (= result (if (bvuge x y) x y))))
+(instantiate umax bv_binary_8_to_64)
+
+(spec (iconst arg)
+    (provide (= arg (zero_ext 64 result))))
+(instantiate iconst
+    ((args (bv 64)) (ret (bv 8)) (canon (bv 8)))
+    ((args (bv 64)) (ret (bv 16)) (canon (bv 16)))
+    ((args (bv 64)) (ret (bv 32)) (canon (bv 32)))
+    ((args (bv 64)) (ret (bv 64)) (canon (bv 64)))
+)
+
+(spec (udiv x y)
+    (provide (= result (bvudiv x y)))
+    (require (not (= y (zero_ext (widthof y) #b0)))))
+(instantiate udiv bv_binary_8_to_64)
+
+---
+
+(source
+  (spec
+    (spec_term (ident) (ident) (ident))
+    (provide
+      (spec_operation
+        (ident)
+        (spec_operation
+          (spec_operation (ident) (ident))
+          (ident)
+          (ident)))))
+  (instantiate (ident) (ident))
+  (spec
+    (spec_term (ident) (ident))
+    (provide
+      (spec_operation
+        (ident)
+        (spec_operation (int) (ident)))))
+  (instantiate
+    (ident)
+    (sig
+      (sig_args (bv_ty (int)))
+      (sig_ret (bv_ty (int)))
+      (sig_canon (bv_ty (int))))
+    (sig
+      (sig_args (bv_ty (int)))
+      (sig_ret (bv_ty (int)))
+      (sig_canon (bv_ty (int))))
+    (sig
+      (sig_args (bv_ty (int)))
+      (sig_ret (bv_ty (int)))
+      (sig_canon (bv_ty (int))))
+    (sig
+      (sig_args (bv_ty (int)))
+      (sig_ret (bv_ty (int)))
+      (sig_canon (bv_ty (int)))))
+  (spec
+    (spec_term (ident) (ident) (ident))
+    (provide
+      (spec_operation
+        (ident)
+        (spec_operation
+          (ident)
+          (ident))))
+    (require
+      (spec_operation
+        (spec_operation
+          (ident)
+          (spec_operation
+            (spec_operation (ident))
+            (bv_const))))))
+  (instantiate (ident) (ident)))
