@@ -34,24 +34,28 @@ module.exports = grammar({
       $.extractor,
       $._extern,
       $.convert,
+      $.model,
+      $.form,
+      $.spec,
+      $.instantiate,
     ),
 
     // ;;;; base ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-    bool: $ => choice('true', 'false'),
+    bool: _ => choice('true', 'false'),
 
-    int: $ => choice(
+    int: _ => choice(
       /-?[0-9][0-9_]*/,
       /-?0[xX][0-9A-Fa-f_]+/,
       /-?0[oO][0-7_]+/,
       /-?0[bB][01_]+/,
     ),
 
-    wildcard: $ => '_',
+    wildcard: _ => '_',
 
-    ident: $ => /[^\s\(\);\$0-9-][^\s\(\);@]*/,
+    ident: _ => /[^\s();#$0-9-][^\s();@]*/,
     ty: $ => alias($.ident, 'ty'),
-    const_ident: $ => /\$[^\s\(\);@]*/,
+    const_ident: _ => /\$[^\s();@]*/,
 
     if_let: $ => seq(
       '(',
@@ -143,7 +147,7 @@ module.exports = grammar({
     type: $ => seq(
       '(',
       field('op', 'type'),
-      field('name', $.ident),
+      field('name', $.ty),
       field('modifier', optional(choice('extern', 'nodebug'))),
       field('body', choice($.type_primitive, $.type_enum)),
       ')',
@@ -152,28 +156,28 @@ module.exports = grammar({
     type_primitive: $ => seq(
       '(',
       field('op', 'primitive'),
-      field('name', $.ident),
+      field('name', $.ty),
       ')',
     ),
 
     type_enum: $ => seq(
       '(',
       field('op', 'enum'),
-      field('variants', repeat($.enum_variant)),
+      field('variants', repeat($.type_enum_variant)),
       ')',
     ),
 
-    enum_variant: $ => choice(
+    type_enum_variant: $ => choice(
       field('name', $.ident),
       seq(
         '(',
         field('name', $.ident),
-        repeat($.variant_field),
+        repeat($.type_enum_variant_field),
         ')',
       ),
     ),
 
-    variant_field: $ => seq(
+    type_enum_variant_field: $ => seq(
       '(',
       field('name', $.ident),
       field('ty', $.ty),
@@ -277,9 +281,224 @@ module.exports = grammar({
 
     // ;;;; comment ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-    comment: $ => token(choice(
+    comment: _ => token(choice(
       /;[^\r\n]*/,
       /\(;(?:[^;]|;+[^;)])*;+\)/,
     )),
+
+    // ;;;; verification base ;;;;;;;;;;;;;;;;;;;;
+
+    unit: _ => '()',
+
+    enum_variant: _ => seq(
+      '(',
+      token.immediate(seq(
+        field('enum', /[A-Za-z_][^\s();@]*/),
+        '.',
+        field('variant', /[A-Za-z_][^\s();@]*/),
+      )),
+      ')',
+    ),
+
+    bv_ty: $ => seq(
+      '(',
+      field('op', 'bv'),
+      field('width', optional($.int)),
+      ')',
+    ),
+
+    bv_const: _ => choice(
+      /#b[+-]?[0-1]+/,
+      /#x[+-]?[0-9A-Fa-f]+/,
+    ),
+
+    sig: $ => seq(
+      '(',
+      $.sig_args,
+      $.sig_ret,
+      $.sig_canon,
+      ')',
+    ),
+
+    sig_args: $ => seq(
+      '(',
+      field('op', 'args'),
+      repeat(choice(
+        $.model_ty,
+        $.bv_ty,
+      )),
+      ')',
+    ),
+
+    sig_ret: $ => seq(
+      '(',
+      field('op', 'ret'),
+      repeat(choice(
+        $.model_ty,
+        $.bv_ty,
+      )),
+      ')',
+    ),
+
+    sig_canon: $ => seq(
+      '(',
+      field('op', 'canon'),
+      repeat(choice(
+        $.model_ty,
+        $.bv_ty,
+      )),
+      ')',
+    ),
+
+    // ;;;; model ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+    model: $ => seq(
+      '(',
+      field('op', 'model'),
+      field('name', $.ty),
+      choice(
+        $.model_type,
+        $.model_enum,
+      ),
+      ')',
+    ),
+
+    model_type: $ => seq(
+      '(',
+      field('kind', 'type'),
+      choice(
+        $.model_ty,
+        $.bv_ty,
+      ),
+      ')',
+    ),
+
+    model_ty: _ => choice(
+      'Bool',
+      'Int',
+      'Unit',
+    ),
+
+    model_enum: $ => seq(
+      '(',
+      'enum',
+      repeat($.model_variant),
+      ')',
+    ),
+
+    model_variant: $ => seq(
+      '(',
+      field('name', $.ident),
+      field('val', optional($.bv_const)),
+      ')',
+    ),
+
+    // ;;;; form ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+    form: $ => seq(
+      '(',
+      field('op', 'form'),
+      field('name', $.ident),
+      repeat($.sig),
+      ')',
+    ),
+
+    // ;;;; spec ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+    spec: $ => seq(
+      '(',
+      field('op', 'spec'),
+      $.spec_term,
+      $.provide,
+      optional($.require),
+      ')',
+    ),
+
+    spec_term: $ => seq(
+      '(',
+      field('term', $.ident),
+      repeat($.ident),
+      ')',
+    ),
+
+    provide: $ => seq(
+      '(',
+      field('op', 'provide'),
+      repeat($._spec_expr),
+      ')',
+    ),
+
+    require: $ => seq(
+      '(',
+      field('op', 'require'),
+      repeat($._spec_expr),
+      ')',
+    ),
+
+    _spec_expr: $ => choice(
+      $.int,
+      $.bv_const,
+      $.bool,
+      $.ident,
+      $.switch,
+      $.spec_operation,
+      $.enum_variant,
+      $.unit,
+    ),
+
+    switch: $ => seq(
+      '(',
+      field('op', 'switch'),
+      $._spec_expr,
+      repeat($.spec_expr_pair),
+      ')',
+    ),
+
+    spec_expr_pair: $ => seq(
+      '(',
+      $._spec_expr,
+      $._spec_expr,
+      ')',
+    ),
+
+    spec_operation: $ => seq(
+      '(',
+      field('op', $._spec_op),
+      repeat($._spec_expr),
+      ')',
+    ),
+
+    _spec_op: _ => choice(
+      '=>',
+      '<=', '>=', '<', '>', '=',
+      'and', 'not', 'or',
+      'bvand', 'bvnot', 'bvor', 'bvxor',
+      'bvadd', 'bvsub', 'bvmul', 'bvneg',
+      'bvudiv', 'bvurem', 'bvsdiv', 'bvsrem',
+      'bvuaddo', 'bvsaddo', 'bvusubo', 'bvssubo',
+      'bvshl', 'bvlshr', 'bvashr',
+      'bvule', 'bvult', 'bvugt', 'bvuge',
+      'bvslt', 'bvsle', 'bvsgt', 'bvsge',
+      'rotl', 'rotr',
+      'extract', 'concat', 'conv_to', 'int2bv', 'bv2int',
+      'zero_ext', 'sign_ext',
+      'widthof',
+      'if',
+      'subs', 'popcnt', 'rev', 'cls', 'clz',
+      'load_effect', 'store_effect',
+    ),
+
+    // ;;;; instantiate ;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+    instantiate: $ => seq(
+      '(',
+      field('op', 'instantiate'),
+      field('fn', $.ident),
+      choice(
+        $.ident,
+        repeat($.sig),
+      ),
+      ')',
+    )
   }
 });

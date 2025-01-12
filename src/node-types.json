@@ -5,6 +5,37 @@
     "fields": {}
   },
   {
+    "type": "bv_const",
+    "named": true,
+    "fields": {}
+  },
+  {
+    "type": "bv_ty",
+    "named": true,
+    "fields": {
+      "op": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "bv",
+            "named": false
+          }
+        ]
+      },
+      "width": {
+        "multiple": false,
+        "required": false,
+        "types": [
+          {
+            "type": "int",
+            "named": true
+          }
+        ]
+      }
+    }
+  },
+  {
     "type": "convert",
     "named": true,
     "fields": {
@@ -144,28 +175,7 @@
   {
     "type": "enum_variant",
     "named": true,
-    "fields": {
-      "name": {
-        "multiple": false,
-        "required": true,
-        "types": [
-          {
-            "type": "ident",
-            "named": true
-          }
-        ]
-      }
-    },
-    "children": {
-      "multiple": true,
-      "required": false,
-      "types": [
-        {
-          "type": "variant_field",
-          "named": true
-        }
-      ]
-    }
+    "fields": {}
   },
   {
     "type": "expr_term",
@@ -425,6 +435,42 @@
     }
   },
   {
+    "type": "form",
+    "named": true,
+    "fields": {
+      "name": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "ident",
+            "named": true
+          }
+        ]
+      },
+      "op": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "form",
+            "named": false
+          }
+        ]
+      }
+    },
+    "children": {
+      "multiple": true,
+      "required": false,
+      "types": [
+        {
+          "type": "sig",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
     "type": "if",
     "named": true,
     "fields": {
@@ -527,6 +573,46 @@
         },
         {
           "type": "wildcard",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "instantiate",
+    "named": true,
+    "fields": {
+      "fn": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "ident",
+            "named": true
+          }
+        ]
+      },
+      "op": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "instantiate",
+            "named": false
+          }
+        ]
+      }
+    },
+    "children": {
+      "multiple": true,
+      "required": false,
+      "types": [
+        {
+          "type": "ident",
+          "named": true
+        },
+        {
+          "type": "sig",
           "named": true
         }
       ]
@@ -638,6 +724,122 @@
           "named": true
         }
       ]
+    }
+  },
+  {
+    "type": "model",
+    "named": true,
+    "fields": {
+      "name": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "ty",
+            "named": true
+          }
+        ]
+      },
+      "op": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "model",
+            "named": false
+          }
+        ]
+      }
+    },
+    "children": {
+      "multiple": false,
+      "required": true,
+      "types": [
+        {
+          "type": "model_enum",
+          "named": true
+        },
+        {
+          "type": "model_type",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "model_enum",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": false,
+      "types": [
+        {
+          "type": "model_variant",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "model_ty",
+    "named": true,
+    "fields": {}
+  },
+  {
+    "type": "model_type",
+    "named": true,
+    "fields": {
+      "kind": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "type",
+            "named": false
+          }
+        ]
+      }
+    },
+    "children": {
+      "multiple": false,
+      "required": true,
+      "types": [
+        {
+          "type": "bv_ty",
+          "named": true
+        },
+        {
+          "type": "model_ty",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "model_variant",
+    "named": true,
+    "fields": {
+      "name": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "ident",
+            "named": true
+          }
+        ]
+      },
+      "val": {
+        "multiple": false,
+        "required": false,
+        "types": [
+          {
+            "type": "bv_const",
+            "named": true
+          }
+        ]
+      }
     }
   },
   {
@@ -807,6 +1009,114 @@
     }
   },
   {
+    "type": "provide",
+    "named": true,
+    "fields": {
+      "op": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "provide",
+            "named": false
+          }
+        ]
+      }
+    },
+    "children": {
+      "multiple": true,
+      "required": false,
+      "types": [
+        {
+          "type": "bool",
+          "named": true
+        },
+        {
+          "type": "bv_const",
+          "named": true
+        },
+        {
+          "type": "enum_variant",
+          "named": true
+        },
+        {
+          "type": "ident",
+          "named": true
+        },
+        {
+          "type": "int",
+          "named": true
+        },
+        {
+          "type": "spec_operation",
+          "named": true
+        },
+        {
+          "type": "switch",
+          "named": true
+        },
+        {
+          "type": "unit",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "require",
+    "named": true,
+    "fields": {
+      "op": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "require",
+            "named": false
+          }
+        ]
+      }
+    },
+    "children": {
+      "multiple": true,
+      "required": false,
+      "types": [
+        {
+          "type": "bool",
+          "named": true
+        },
+        {
+          "type": "bv_const",
+          "named": true
+        },
+        {
+          "type": "enum_variant",
+          "named": true
+        },
+        {
+          "type": "ident",
+          "named": true
+        },
+        {
+          "type": "int",
+          "named": true
+        },
+        {
+          "type": "spec_operation",
+          "named": true
+        },
+        {
+          "type": "switch",
+          "named": true
+        },
+        {
+          "type": "unit",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
     "type": "rule",
     "named": true,
     "fields": {
@@ -885,6 +1195,119 @@
     }
   },
   {
+    "type": "sig",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "sig_args",
+          "named": true
+        },
+        {
+          "type": "sig_canon",
+          "named": true
+        },
+        {
+          "type": "sig_ret",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "sig_args",
+    "named": true,
+    "fields": {
+      "op": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "args",
+            "named": false
+          }
+        ]
+      }
+    },
+    "children": {
+      "multiple": true,
+      "required": false,
+      "types": [
+        {
+          "type": "bv_ty",
+          "named": true
+        },
+        {
+          "type": "model_ty",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "sig_canon",
+    "named": true,
+    "fields": {
+      "op": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "canon",
+            "named": false
+          }
+        ]
+      }
+    },
+    "children": {
+      "multiple": true,
+      "required": false,
+      "types": [
+        {
+          "type": "bv_ty",
+          "named": true
+        },
+        {
+          "type": "model_ty",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "sig_ret",
+    "named": true,
+    "fields": {
+      "op": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "ret",
+            "named": false
+          }
+        ]
+      }
+    },
+    "children": {
+      "multiple": true,
+      "required": false,
+      "types": [
+        {
+          "type": "bv_ty",
+          "named": true
+        },
+        {
+          "type": "model_ty",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
     "type": "source",
     "named": true,
     "root": true,
@@ -918,6 +1341,18 @@
           "named": true
         },
         {
+          "type": "form",
+          "named": true
+        },
+        {
+          "type": "instantiate",
+          "named": true
+        },
+        {
+          "type": "model",
+          "named": true
+        },
+        {
           "type": "pragma",
           "named": true
         },
@@ -926,7 +1361,438 @@
           "named": true
         },
         {
+          "type": "spec",
+          "named": true
+        },
+        {
           "type": "type",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "spec",
+    "named": true,
+    "fields": {
+      "op": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "spec",
+            "named": false
+          }
+        ]
+      }
+    },
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "provide",
+          "named": true
+        },
+        {
+          "type": "require",
+          "named": true
+        },
+        {
+          "type": "spec_term",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "spec_expr_pair",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "bool",
+          "named": true
+        },
+        {
+          "type": "bv_const",
+          "named": true
+        },
+        {
+          "type": "enum_variant",
+          "named": true
+        },
+        {
+          "type": "ident",
+          "named": true
+        },
+        {
+          "type": "int",
+          "named": true
+        },
+        {
+          "type": "spec_operation",
+          "named": true
+        },
+        {
+          "type": "switch",
+          "named": true
+        },
+        {
+          "type": "unit",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "spec_operation",
+    "named": true,
+    "fields": {
+      "op": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "<",
+            "named": false
+          },
+          {
+            "type": "<=",
+            "named": false
+          },
+          {
+            "type": "=",
+            "named": false
+          },
+          {
+            "type": "=>",
+            "named": false
+          },
+          {
+            "type": ">",
+            "named": false
+          },
+          {
+            "type": ">=",
+            "named": false
+          },
+          {
+            "type": "and",
+            "named": false
+          },
+          {
+            "type": "bv2int",
+            "named": false
+          },
+          {
+            "type": "bvadd",
+            "named": false
+          },
+          {
+            "type": "bvand",
+            "named": false
+          },
+          {
+            "type": "bvashr",
+            "named": false
+          },
+          {
+            "type": "bvlshr",
+            "named": false
+          },
+          {
+            "type": "bvmul",
+            "named": false
+          },
+          {
+            "type": "bvneg",
+            "named": false
+          },
+          {
+            "type": "bvnot",
+            "named": false
+          },
+          {
+            "type": "bvor",
+            "named": false
+          },
+          {
+            "type": "bvsaddo",
+            "named": false
+          },
+          {
+            "type": "bvsdiv",
+            "named": false
+          },
+          {
+            "type": "bvsge",
+            "named": false
+          },
+          {
+            "type": "bvsgt",
+            "named": false
+          },
+          {
+            "type": "bvshl",
+            "named": false
+          },
+          {
+            "type": "bvsle",
+            "named": false
+          },
+          {
+            "type": "bvslt",
+            "named": false
+          },
+          {
+            "type": "bvsrem",
+            "named": false
+          },
+          {
+            "type": "bvssubo",
+            "named": false
+          },
+          {
+            "type": "bvsub",
+            "named": false
+          },
+          {
+            "type": "bvuaddo",
+            "named": false
+          },
+          {
+            "type": "bvudiv",
+            "named": false
+          },
+          {
+            "type": "bvuge",
+            "named": false
+          },
+          {
+            "type": "bvugt",
+            "named": false
+          },
+          {
+            "type": "bvule",
+            "named": false
+          },
+          {
+            "type": "bvult",
+            "named": false
+          },
+          {
+            "type": "bvurem",
+            "named": false
+          },
+          {
+            "type": "bvusubo",
+            "named": false
+          },
+          {
+            "type": "bvxor",
+            "named": false
+          },
+          {
+            "type": "cls",
+            "named": false
+          },
+          {
+            "type": "clz",
+            "named": false
+          },
+          {
+            "type": "concat",
+            "named": false
+          },
+          {
+            "type": "conv_to",
+            "named": false
+          },
+          {
+            "type": "extract",
+            "named": false
+          },
+          {
+            "type": "if",
+            "named": false
+          },
+          {
+            "type": "int2bv",
+            "named": false
+          },
+          {
+            "type": "load_effect",
+            "named": false
+          },
+          {
+            "type": "not",
+            "named": false
+          },
+          {
+            "type": "or",
+            "named": false
+          },
+          {
+            "type": "popcnt",
+            "named": false
+          },
+          {
+            "type": "rev",
+            "named": false
+          },
+          {
+            "type": "rotl",
+            "named": false
+          },
+          {
+            "type": "rotr",
+            "named": false
+          },
+          {
+            "type": "sign_ext",
+            "named": false
+          },
+          {
+            "type": "store_effect",
+            "named": false
+          },
+          {
+            "type": "subs",
+            "named": false
+          },
+          {
+            "type": "widthof",
+            "named": false
+          },
+          {
+            "type": "zero_ext",
+            "named": false
+          }
+        ]
+      }
+    },
+    "children": {
+      "multiple": true,
+      "required": false,
+      "types": [
+        {
+          "type": "bool",
+          "named": true
+        },
+        {
+          "type": "bv_const",
+          "named": true
+        },
+        {
+          "type": "enum_variant",
+          "named": true
+        },
+        {
+          "type": "ident",
+          "named": true
+        },
+        {
+          "type": "int",
+          "named": true
+        },
+        {
+          "type": "spec_operation",
+          "named": true
+        },
+        {
+          "type": "switch",
+          "named": true
+        },
+        {
+          "type": "unit",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "spec_term",
+    "named": true,
+    "fields": {
+      "term": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "ident",
+            "named": true
+          }
+        ]
+      }
+    },
+    "children": {
+      "multiple": true,
+      "required": false,
+      "types": [
+        {
+          "type": "ident",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "switch",
+    "named": true,
+    "fields": {
+      "op": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "switch",
+            "named": false
+          }
+        ]
+      }
+    },
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "bool",
+          "named": true
+        },
+        {
+          "type": "bv_const",
+          "named": true
+        },
+        {
+          "type": "enum_variant",
+          "named": true
+        },
+        {
+          "type": "ident",
+          "named": true
+        },
+        {
+          "type": "int",
+          "named": true
+        },
+        {
+          "type": "spec_expr_pair",
+          "named": true
+        },
+        {
+          "type": "spec_operation",
+          "named": true
+        },
+        {
+          "type": "switch",
+          "named": true
+        },
+        {
+          "type": "unit",
           "named": true
         }
       ]
@@ -974,7 +1840,7 @@
         "required": true,
         "types": [
           {
-            "type": "ident",
+            "type": "ty",
             "named": true
           }
         ]
@@ -1010,7 +1876,7 @@
         "required": false,
         "types": [
           {
-            "type": "enum_variant",
+            "type": "type_enum_variant",
             "named": true
           }
         ]
@@ -1018,7 +1884,7 @@
     }
   },
   {
-    "type": "type_primitive",
+    "type": "type_enum_variant",
     "named": true,
     "fields": {
       "name": {
@@ -1030,21 +1896,21 @@
             "named": true
           }
         ]
-      },
-      "op": {
-        "multiple": false,
-        "required": true,
-        "types": [
-          {
-            "type": "primitive",
-            "named": false
-          }
-        ]
       }
+    },
+    "children": {
+      "multiple": true,
+      "required": false,
+      "types": [
+        {
+          "type": "type_enum_variant_field",
+          "named": true
+        }
+      ]
     }
   },
   {
-    "type": "variant_field",
+    "type": "type_enum_variant_field",
     "named": true,
     "fields": {
       "name": {
@@ -1070,6 +1936,32 @@
     }
   },
   {
+    "type": "type_primitive",
+    "named": true,
+    "fields": {
+      "name": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "ty",
+            "named": true
+          }
+        ]
+      },
+      "op": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "primitive",
+            "named": false
+          }
+        ]
+      }
+    }
+  },
+  {
     "type": "(",
     "named": false
   },
@@ -1078,7 +1970,43 @@
     "named": false
   },
   {
+    "type": "<",
+    "named": false
+  },
+  {
+    "type": "<=",
+    "named": false
+  },
+  {
+    "type": "=",
+    "named": false
+  },
+  {
+    "type": "=>",
+    "named": false
+  },
+  {
+    "type": ">",
+    "named": false
+  },
+  {
+    "type": ">=",
+    "named": false
+  },
+  {
     "type": "@",
+    "named": false
+  },
+  {
+    "type": "Bool",
+    "named": false
+  },
+  {
+    "type": "Int",
+    "named": false
+  },
+  {
+    "type": "Unit",
     "named": false
   },
   {
@@ -1086,8 +2014,144 @@
     "named": false
   },
   {
+    "type": "args",
+    "named": false
+  },
+  {
+    "type": "bv",
+    "named": false
+  },
+  {
+    "type": "bv2int",
+    "named": false
+  },
+  {
+    "type": "bvadd",
+    "named": false
+  },
+  {
+    "type": "bvand",
+    "named": false
+  },
+  {
+    "type": "bvashr",
+    "named": false
+  },
+  {
+    "type": "bvlshr",
+    "named": false
+  },
+  {
+    "type": "bvmul",
+    "named": false
+  },
+  {
+    "type": "bvneg",
+    "named": false
+  },
+  {
+    "type": "bvnot",
+    "named": false
+  },
+  {
+    "type": "bvor",
+    "named": false
+  },
+  {
+    "type": "bvsaddo",
+    "named": false
+  },
+  {
+    "type": "bvsdiv",
+    "named": false
+  },
+  {
+    "type": "bvsge",
+    "named": false
+  },
+  {
+    "type": "bvsgt",
+    "named": false
+  },
+  {
+    "type": "bvshl",
+    "named": false
+  },
+  {
+    "type": "bvsle",
+    "named": false
+  },
+  {
+    "type": "bvslt",
+    "named": false
+  },
+  {
+    "type": "bvsrem",
+    "named": false
+  },
+  {
+    "type": "bvssubo",
+    "named": false
+  },
+  {
+    "type": "bvsub",
+    "named": false
+  },
+  {
+    "type": "bvuaddo",
+    "named": false
+  },
+  {
+    "type": "bvudiv",
+    "named": false
+  },
+  {
+    "type": "bvuge",
+    "named": false
+  },
+  {
+    "type": "bvugt",
+    "named": false
+  },
+  {
+    "type": "bvule",
+    "named": false
+  },
+  {
+    "type": "bvult",
+    "named": false
+  },
+  {
+    "type": "bvurem",
+    "named": false
+  },
+  {
+    "type": "bvusubo",
+    "named": false
+  },
+  {
+    "type": "bvxor",
+    "named": false
+  },
+  {
+    "type": "canon",
+    "named": false
+  },
+  {
+    "type": "cls",
+    "named": false
+  },
+  {
+    "type": "clz",
+    "named": false
+  },
+  {
     "type": "comment",
     "named": true
+  },
+  {
+    "type": "concat",
+    "named": false
   },
   {
     "type": "const",
@@ -1099,6 +2163,10 @@
   },
   {
     "type": "constructor",
+    "named": false
+  },
+  {
+    "type": "conv_to",
     "named": false
   },
   {
@@ -1118,11 +2186,19 @@
     "named": false
   },
   {
+    "type": "extract",
+    "named": false
+  },
+  {
     "type": "extractor",
     "named": false
   },
   {
     "type": "false",
+    "named": false
+  },
+  {
+    "type": "form",
     "named": false
   },
   {
@@ -1142,7 +2218,23 @@
     "named": false
   },
   {
+    "type": "instantiate",
+    "named": false
+  },
+  {
+    "type": "int2bv",
+    "named": false
+  },
+  {
     "type": "let",
+    "named": false
+  },
+  {
+    "type": "load_effect",
+    "named": false
+  },
+  {
+    "type": "model",
     "named": false
   },
   {
@@ -1154,7 +2246,19 @@
     "named": false
   },
   {
+    "type": "not",
+    "named": false
+  },
+  {
+    "type": "or",
+    "named": false
+  },
+  {
     "type": "partial",
+    "named": false
+  },
+  {
+    "type": "popcnt",
     "named": false
   },
   {
@@ -1166,11 +2270,55 @@
     "named": false
   },
   {
+    "type": "provide",
+    "named": false
+  },
+  {
     "type": "pure",
     "named": false
   },
   {
+    "type": "require",
+    "named": false
+  },
+  {
+    "type": "ret",
+    "named": false
+  },
+  {
+    "type": "rev",
+    "named": false
+  },
+  {
+    "type": "rotl",
+    "named": false
+  },
+  {
+    "type": "rotr",
+    "named": false
+  },
+  {
     "type": "rule",
+    "named": false
+  },
+  {
+    "type": "sign_ext",
+    "named": false
+  },
+  {
+    "type": "spec",
+    "named": false
+  },
+  {
+    "type": "store_effect",
+    "named": false
+  },
+  {
+    "type": "subs",
+    "named": false
+  },
+  {
+    "type": "switch",
     "named": false
   },
   {
@@ -1186,7 +2334,19 @@
     "named": false
   },
   {
+    "type": "unit",
+    "named": true
+  },
+  {
+    "type": "widthof",
+    "named": false
+  },
+  {
     "type": "wildcard",
     "named": true
+  },
+  {
+    "type": "zero_ext",
+    "named": false
   }
 ]

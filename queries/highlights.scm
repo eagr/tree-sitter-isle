@@ -1,6 +1,7 @@
 (comment) @comment
 
 (ident) @variable
+(ty) @type
 ((ident) @type
   (#match? @type "^[A-Z]"))
 
@@ -31,9 +32,9 @@
 (type modifier: "nodebug" @keyword)
 (type_enum op: "enum" @keyword)
 (type_primitive op: "primitive" @keyword)
-(enum_variant name: (ident) @constant)
-(variant_field name: (ident) @property)
-(variant_field ty: (ty) @type)
+(type_enum_variant name: (ident) @constant)
+(type_enum_variant_field name: (ident) @property)
+(type_enum_variant_field ty: (ty) @type)
 
 (decl op: "decl" @keyword
       term: (ident) @function

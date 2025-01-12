@@ -21,29 +21,29 @@ type
 
 (source
   (type
-    (ident)
+    (ty)
     (type_enum
-      (enum_variant (ident))
-      (enum_variant (ident))))
+      (type_enum_variant (ident))
+      (type_enum_variant (ident))))
   (type
-    (ident)
+    (ty)
     (type_enum
-      (enum_variant (ident))
-      (enum_variant (ident))))
+      (type_enum_variant (ident))
+      (type_enum_variant (ident))))
   (type
-    (ident)
+    (ty)
     (type_enum
-      (enum_variant (ident))
-      (enum_variant (ident) (variant_field (ident) (ty)))
-      (enum_variant (ident) (variant_field (ident) (ty))
-                            (variant_field (ident) (ty)))
-      (enum_variant (ident) (variant_field (ident) (ty))
-                            (variant_field (ident) (ty))
-                            (variant_field (ident) (ty)))
-      (enum_variant (ident) (variant_field (ident) (ty))
-                            (variant_field (ident) (ty))
-                            (variant_field (ident) (ty))
-                            (variant_field (ident) (ty))))))
+      (type_enum_variant (ident))
+      (type_enum_variant (ident) (type_enum_variant_field (ident) (ty)))
+      (type_enum_variant (ident) (type_enum_variant_field (ident) (ty))
+                            (type_enum_variant_field (ident) (ty)))
+      (type_enum_variant (ident) (type_enum_variant_field (ident) (ty))
+                            (type_enum_variant_field (ident) (ty))
+                            (type_enum_variant_field (ident) (ty)))
+      (type_enum_variant (ident) (type_enum_variant_field (ident) (ty))
+                            (type_enum_variant_field (ident) (ty))
+                            (type_enum_variant_field (ident) (ty))
+                            (type_enum_variant_field (ident) (ty))))))
 
 ================================
 decl
@@ -320,11 +320,11 @@ line comment
   (comment)
   (comment)
   (type
-    (ident)
+    (ty)
     (type_enum
-      (enum_variant (ident))
+      (type_enum_variant (ident))
       (comment)
-      (enum_variant (ident))))
+      (type_enum_variant (ident))))
   (comment))
 
 ================================
