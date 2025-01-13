@@ -193,7 +193,7 @@ module.exports = grammar({
       field('modifier_pure', optional('pure')),
       field('modifier_multi', optional('multi')),
       field('modifier_partial', optional('partial')),
-      field('term', $.ident),
+      field('name', $.ident),
       field('params', $.decl_params),
       field('ret', $.ty),
       ')',
@@ -256,7 +256,7 @@ module.exports = grammar({
     extern_constructor: $ => seq(
       field('op', 'extern'),
       field('kind', 'constructor'),
-      field('term', $.ident),
+      field('name', $.ident),
       field('fn', $.ident),
     ),
 
@@ -264,7 +264,7 @@ module.exports = grammar({
       field('op', 'extern'),
       field('kind', 'extractor'),
       field('modifier', optional('infallible')),
-      field('term', $.ident),
+      field('name', $.ident),
       field('fn', $.ident),
     ),
 
@@ -275,7 +275,7 @@ module.exports = grammar({
       field('op', 'convert'),
       field('inner', $.ty),
       field('outer', $.ty),
-      field('term', $.ident),
+      field('name', $.ident),
       ')',
     ),
 
@@ -416,7 +416,7 @@ module.exports = grammar({
 
     spec_term: $ => seq(
       '(',
-      field('term', $.ident),
+      field('name', $.ident),
       repeat($.ident),
       ')',
     ),

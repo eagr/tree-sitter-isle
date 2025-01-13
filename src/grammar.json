@@ -697,7 +697,7 @@
         },
         {
           "type": "FIELD",
-          "name": "term",
+          "name": "name",
           "content": {
             "type": "SYMBOL",
             "name": "ident"
@@ -966,7 +966,7 @@
         },
         {
           "type": "FIELD",
-          "name": "term",
+          "name": "name",
           "content": {
             "type": "SYMBOL",
             "name": "ident"
@@ -1019,7 +1019,7 @@
         },
         {
           "type": "FIELD",
-          "name": "term",
+          "name": "name",
           "content": {
             "type": "SYMBOL",
             "name": "ident"
@@ -1068,7 +1068,7 @@
         },
         {
           "type": "FIELD",
-          "name": "term",
+          "name": "name",
           "content": {
             "type": "SYMBOL",
             "name": "ident"
@@ -1571,7 +1571,7 @@
         },
         {
           "type": "FIELD",
-          "name": "term",
+          "name": "name",
           "content": {
             "type": "SYMBOL",
             "name": "ident"

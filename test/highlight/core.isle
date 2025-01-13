@@ -61,6 +61,7 @@
 ;                                                   ^ boolean
 ;                                 ^ keyword
 ;                     ^ variable
+;           ^ function
 ; ^ keyword
 
 (extern const $F64X2 Type)

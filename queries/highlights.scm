@@ -38,7 +38,7 @@
 (type_enum_variant_field ty: (ty) @type)
 
 (decl op: "decl" @keyword
-      term: (ident) @function
+      name: (ident) @function
       ret: (ty) @type)
 (decl modifier_pure: "pure" @keyword)
 (decl modifier_multi: "multi" @keyword)
@@ -49,27 +49,29 @@
 (if_let op: "if-let" @keyword)
 (if op: "if" @keyword)
 (let op: "let" @keyword)
-
-(extractor op: "extractor" @keyword)
 (pattern_and op: "and" @keyword)
+
+(extractor
+  op: "extractor" @keyword
+  term: (ident) @function)
 
 (extern_const op: "extern" @keyword
               kind: "const" @keyword
               ty: (ty) @type)
 (extern_constructor op: "extern" @keyword
                     kind: "constructor" @keyword
-                    term: (ident) @function
+                    name: (ident) @function
                     fn: (ident) @function)
 (extern_extractor op: "extern" @keyword
                   kind: "extractor" @keyword
-                  term: (ident) @function
+                  name: (ident) @function
                   fn: (ident) @function)
 (extern_extractor modifier: "infallible" @keyword)
 
 (convert  op: "convert" @keyword
           inner: (ty) @type
           outer: (ty) @type
-          term: (ident) @function)
+          name: (ident) @function)
 
 (bv_ty op: "bv" @keyword)
 
@@ -89,7 +91,7 @@
   name: (ident) @function)
 
 (spec op: "spec" @keyword)
-(spec_term term: (ident) @function)
+(spec_term name: (ident) @function)
 (provide op: "provide" @keyword)
 (require op: "require" @keyword)
 (switch op: "switch" @keyword)

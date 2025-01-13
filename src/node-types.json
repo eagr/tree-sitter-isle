@@ -49,6 +49,16 @@
           }
         ]
       },
+      "name": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "ident",
+            "named": true
+          }
+        ]
+      },
       "op": {
         "multiple": false,
         "required": true,
@@ -65,16 +75,6 @@
         "types": [
           {
             "type": "ty",
-            "named": true
-          }
-        ]
-      },
-      "term": {
-        "multiple": false,
-        "required": true,
-        "types": [
-          {
-            "type": "ident",
             "named": true
           }
         ]
@@ -115,6 +115,16 @@
           }
         ]
       },
+      "name": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "ident",
+            "named": true
+          }
+        ]
+      },
       "op": {
         "multiple": false,
         "required": true,
@@ -141,16 +151,6 @@
         "types": [
           {
             "type": "ty",
-            "named": true
-          }
-        ]
-      },
-      "term": {
-        "multiple": false,
-        "required": true,
-        "types": [
-          {
-            "type": "ident",
             "named": true
           }
         ]
@@ -282,6 +282,16 @@
           }
         ]
       },
+      "name": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "ident",
+            "named": true
+          }
+        ]
+      },
       "op": {
         "multiple": false,
         "required": true,
@@ -289,16 +299,6 @@
           {
             "type": "extern",
             "named": false
-          }
-        ]
-      },
-      "term": {
-        "multiple": false,
-        "required": true,
-        "types": [
-          {
-            "type": "ident",
-            "named": true
           }
         ]
       }
@@ -338,6 +338,16 @@
           }
         ]
       },
+      "name": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "ident",
+            "named": true
+          }
+        ]
+      },
       "op": {
         "multiple": false,
         "required": true,
@@ -345,16 +355,6 @@
           {
             "type": "extern",
             "named": false
-          }
-        ]
-      },
-      "term": {
-        "multiple": false,
-        "required": true,
-        "types": [
-          {
-            "type": "ident",
-            "named": true
           }
         ]
       }
@@ -1757,7 +1757,7 @@
     "type": "spec_term",
     "named": true,
     "fields": {
-      "term": {
+      "name": {
         "multiple": false,
         "required": true,
         "types": [
