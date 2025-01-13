@@ -582,16 +582,6 @@
     "type": "instantiate",
     "named": true,
     "fields": {
-      "fn": {
-        "multiple": false,
-        "required": true,
-        "types": [
-          {
-            "type": "ident",
-            "named": true
-          }
-        ]
-      },
       "op": {
         "multiple": false,
         "required": true,
@@ -599,6 +589,16 @@
           {
             "type": "instantiate",
             "named": false
+          }
+        ]
+      },
+      "term": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "ident",
+            "named": true
           }
         ]
       }
@@ -769,7 +769,18 @@
   {
     "type": "model_enum",
     "named": true,
-    "fields": {},
+    "fields": {
+      "kind": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "enum",
+            "named": false
+          }
+        ]
+      }
+    },
     "children": {
       "multiple": true,
       "required": false,

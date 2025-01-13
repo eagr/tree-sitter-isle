@@ -1,22 +1,23 @@
 (comment) @comment
 
 (ident) @variable
-(ty) @type
+
 ((ident) @type
   (#match? @type "^[A-Z]"))
 
-(const_ident) @constant
+[
+  (ty)
+  (model_ty)
+] @type
+
+[
+  (const_ident)
+  (enum_variant)
+  (bv_const)
+] @constant
 
 (int) @number
-
-[
-  "true"
-  "false"
-] @boolean
-
-[
-  "@"
-] @operator
+(bool) @boolean
 
 (wildcard) @keyword
 
@@ -69,3 +70,41 @@
           inner: (ty) @type
           outer: (ty) @type
           term: (ident) @function)
+
+(bv_ty op: "bv" @keyword)
+
+(sig_args op: "args" @keyword)
+(sig_ret op: "ret" @keyword)
+(sig_canon op: "canon" @keyword)
+
+(model
+  op: "model" @keyword
+  name: (ty) @type)
+(model_type kind: "type" @keyword)
+(model_enum kind: "enum" @keyword)
+(model_enum_variant name: (ident) @constant)
+
+(form
+  op: "form" @keyword
+  name: (ident) @function)
+
+(spec op: "spec" @keyword)
+(spec_term term: (ident) @function)
+(provide op: "provide" @keyword)
+(require op: "require" @keyword)
+(switch op: "switch" @keyword)
+(spec_operation op: _ @function)
+
+(instantiate
+  op: "instantiate" @keyword
+  term: (ident) @function)
+
+[
+  "@"
+  "=>"
+  "<="
+  ">="
+  "<"
+  ">"
+  "="
+] @operator

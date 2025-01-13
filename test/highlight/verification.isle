@@ -1,0 +1,132 @@
+(model bool (type Bool))
+;                 ^ type
+;            ^ keyword
+;      ^ type
+; ^ keyword
+
+(model ALUOp (enum
+;             ^ keyword
+;      ^ type
+  (Add #x00)
+;      ^ constant
+;  ^ constant
+  (Sub #x01)))
+;      ^ constant
+;  ^ constant
+
+(form
+; ^ keyword
+  bv_ternary_8_to_16
+  ((args (bv  8) (bv  8) (bv  8)) (ret (bv  8)) (canon (bv  8)))
+;                                                           ^ number
+;                                                       ^ keyword
+;                                                ^ keyword
+;                                  ^ keyword
+;   ^ keyword
+  ((args (bv 16) (bv 16) (bv 16)) (ret (bv 16)) (canon (bv 16))))
+;                                                           ^ number
+;                                                       ^ keyword
+;                                                ^ keyword
+;                                  ^ keyword
+;   ^ keyword
+
+(spec (vec_cnt x s)
+;                ^ variable
+;              ^ variable
+;      ^ function
+; ^ keyword
+  (provide
+;  ^ keyword
+    (= result
+;      ^ variable
+;    ^ operator
+       (switch s
+;              ^ variable
+;       ^ keyword
+         ((VectorSize.Size8x8)
+;                     ^ constant
+           (concat
+;           ^ function
+             (popcnt (extract 63 56 x))
+;                                   ^ variable
+;                                ^ number
+;                             ^ number
+;                     ^ function
+;             ^ function
+             (popcnt (extract 55 48 x))
+             (popcnt (extract 47 40 x))
+             (popcnt (extract 39 32 x))
+             (popcnt (extract 31 24 x))
+             (popcnt (extract 23 16 x))
+             (popcnt (extract 15  8 x))
+             (popcnt (extract 7   0 x))))
+;                                   ^ variable
+;                                 ^ number
+;                             ^ number
+;                     ^ function
+;             ^ function
+         ((VectorSize.Size16x4) result)
+         ((VectorSize.Size32x2) result)))))
+;                               ^ variable
+;                     ^ constant
+
+(spec (udiv x y)
+;             ^ variable
+;           ^ variable
+;      ^ function
+; ^ keyword
+    (provide (= result (bvudiv x y)))
+;                                ^ variable
+;                              ^ variable
+;                       ^ function
+;             ^ operator
+;    ^ keyword
+    (require (not (= y (zero_ext (widthof y) #b0)))))
+;                                            ^ constant
+;                                         ^ variable
+;                                 ^ function
+;                       ^ function
+;                    ^ variable
+;                  ^ operator
+;             ^ function
+;    ^ keyword
+(instantiate udiv bv_binary_8_to_64)
+;            ^ function
+; ^ keyword
+
+(spec (iconst arg)
+;             ^ variable
+;      ^ function
+; ^ keyword
+    (provide (= arg (zero_ext 64 result))))
+;                             ^ number
+;                    ^ function
+;               ^ variable
+;             ^ operator
+;    ^ keyword
+(instantiate iconst
+;            ^ function
+; ^ keyword
+    ((args (bv 64)) (ret (bv 8)) (canon (bv 8)))
+;                                           ^ number
+;                                        ^ keyword
+;                                 ^ keyword
+;                            ^ number
+;                         ^ keyword
+;                    ^ keyword
+;              ^ number
+;           ^ keyword
+;     ^ keyword
+    ((args (bv 64)) (ret (bv 16)) (canon (bv 16)))
+    ((args (bv 64)) (ret (bv 32)) (canon (bv 32)))
+    ((args (bv 64)) (ret (bv 64)) (canon (bv 64)))
+;                                            ^ number
+;                                         ^ keyword
+;                                  ^ keyword
+;                            ^ number
+;                         ^ keyword
+;                    ^ keyword
+;              ^ number
+;           ^ keyword
+;     ^ keyword
+)

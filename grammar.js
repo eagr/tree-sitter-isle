@@ -381,7 +381,7 @@ module.exports = grammar({
 
     model_enum: $ => seq(
       '(',
-      'enum',
+      field('kind', 'enum'),
       repeat($.model_enum_variant),
       ')',
     ),
@@ -493,7 +493,7 @@ module.exports = grammar({
     instantiate: $ => seq(
       '(',
       field('op', 'instantiate'),
-      field('fn', $.ident),
+      field('term', $.ident),
       choice(
         $.ident,
         repeat($.sig),

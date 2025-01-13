@@ -1428,8 +1428,12 @@
           "value": "("
         },
         {
-          "type": "STRING",
-          "value": "enum"
+          "type": "FIELD",
+          "name": "kind",
+          "content": {
+            "type": "STRING",
+            "value": "enum"
+          }
         },
         {
           "type": "REPEAT",
@@ -1998,7 +2002,7 @@
         },
         {
           "type": "FIELD",
-          "name": "fn",
+          "name": "term",
           "content": {
             "type": "SYMBOL",
             "name": "ident"
