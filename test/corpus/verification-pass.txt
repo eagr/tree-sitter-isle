@@ -170,7 +170,7 @@ spec
         (switch
           (ident)
           (spec_expr_pair
-            (enum_variant)
+            (ident)
             (spec_operation
               (spec_operation
                 (spec_operation (int) (int) (ident)))
@@ -188,8 +188,8 @@ spec
                 (spec_operation (int) (int) (ident)))
               (spec_operation
                 (spec_operation (int) (int) (ident)))))
-          (spec_expr_pair (enum_variant) (ident))
-          (spec_expr_pair (enum_variant) (ident)))))))
+          (spec_expr_pair (ident) (ident))
+          (spec_expr_pair (ident) (ident)))))))
 
 ================================
 instantiate

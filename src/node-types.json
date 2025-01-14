@@ -173,11 +173,6 @@
     }
   },
   {
-    "type": "enum_variant",
-    "named": true,
-    "fields": {}
-  },
-  {
     "type": "expr_term",
     "named": true,
     "fields": {},
@@ -807,19 +802,23 @@
         ]
       },
       "val": {
-        "multiple": false,
+        "multiple": true,
         "required": false,
         "types": [
+          {
+            "type": "(",
+            "named": false
+          },
+          {
+            "type": ")",
+            "named": false
+          },
           {
             "type": "bool",
             "named": true
           },
           {
             "type": "bv_const",
-            "named": true
-          },
-          {
-            "type": "enum_variant",
             "named": true
           },
           {
@@ -1075,10 +1074,6 @@
           "named": true
         },
         {
-          "type": "enum_variant",
-          "named": true
-        },
-        {
           "type": "ident",
           "named": true
         },
@@ -1126,10 +1121,6 @@
         },
         {
           "type": "bv_const",
-          "named": true
-        },
-        {
-          "type": "enum_variant",
           "named": true
         },
         {
@@ -1461,10 +1452,6 @@
           "named": true
         },
         {
-          "type": "enum_variant",
-          "named": true
-        },
-        {
           "type": "ident",
           "named": true
         },
@@ -1727,10 +1714,6 @@
           "named": true
         },
         {
-          "type": "enum_variant",
-          "named": true
-        },
-        {
           "type": "ident",
           "named": true
         },
@@ -1804,10 +1787,6 @@
         },
         {
           "type": "bv_const",
-          "named": true
-        },
-        {
-          "type": "enum_variant",
           "named": true
         },
         {

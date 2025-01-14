@@ -1100,47 +1100,6 @@
       "type": "STRING",
       "value": "()"
     },
-    "enum_variant": {
-      "type": "SEQ",
-      "members": [
-        {
-          "type": "STRING",
-          "value": "("
-        },
-        {
-          "type": "IMMEDIATE_TOKEN",
-          "content": {
-            "type": "SEQ",
-            "members": [
-              {
-                "type": "FIELD",
-                "name": "enum",
-                "content": {
-                  "type": "PATTERN",
-                  "value": "[A-Za-z_][^\\s();@]*"
-                }
-              },
-              {
-                "type": "STRING",
-                "value": "."
-              },
-              {
-                "type": "FIELD",
-                "name": "variant",
-                "content": {
-                  "type": "PATTERN",
-                  "value": "[A-Za-z_][^\\s();@]*"
-                }
-              }
-            ]
-          }
-        },
-        {
-          "type": "STRING",
-          "value": ")"
-        }
-      ]
-    },
     "bv_ty": {
       "type": "SEQ",
       "members": [
@@ -1674,8 +1633,21 @@
           "name": "spec_operation"
         },
         {
-          "type": "SYMBOL",
-          "name": "enum_variant"
+          "type": "SEQ",
+          "members": [
+            {
+              "type": "STRING",
+              "value": "("
+            },
+            {
+              "type": "SYMBOL",
+              "name": "ident"
+            },
+            {
+              "type": "STRING",
+              "value": ")"
+            }
+          ]
         },
         {
           "type": "SYMBOL",

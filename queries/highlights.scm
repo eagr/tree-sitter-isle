@@ -1,3 +1,5 @@
+["(" ")"] @punctuation.bracket
+
 (comment) @comment
 
 (ident) @variable
@@ -13,13 +15,11 @@
 
 [
   (const_ident)
-  (enum_variant)
   (bv_const)
 ] @constant
 
 (int) @number
 (bool) @boolean
-
 (wildcard) @keyword
 
 (pragma op: "pragma" @keyword)
@@ -106,8 +106,3 @@
   ">"
   "="
 ] @operator
-
-[
-  "("
-  ")"
-] @punctuation.bracket

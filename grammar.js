@@ -290,16 +290,6 @@ module.exports = grammar({
 
     unit: _ => '()',
 
-    enum_variant: _ => seq(
-      '(',
-      token.immediate(seq(
-        field('enum', /[A-Za-z_][^\s();@]*/),
-        '.',
-        field('variant', /[A-Za-z_][^\s();@]*/),
-      )),
-      ')',
-    ),
-
     bv_ty: $ => seq(
       '(',
       field('op', 'bv'),
@@ -442,7 +432,7 @@ module.exports = grammar({
       $.ident,
       $.switch,
       $.spec_operation,
-      $.enum_variant,
+      seq('(', $.ident, ')'),
       $.unit,
     ),
 
