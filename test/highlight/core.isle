@@ -29,7 +29,7 @@
 ; ^ keyword
 
 (rule operand_size_32 1 (operand_size (fits_in_32 _)) (OperandSize.Size32))
-;                                                        ^ type
+;                                                                  ^ constant
 ;                                                 ^ keyword
 ;                     ^ number
 ; ^ keyword
@@ -52,8 +52,9 @@
 ;      ^ keyword
            (addr AMode (AMode.FPOffset 8))
 ;                                      ^ number
+;                             ^ constant
            (_ Unit (emit (MInst.ULoad64 dst addr (mem_flags_trusted)))))
-;                         ^ type
+;                               ^ constant
            dst))
 
 (extractor (valid_reg extractor) (and (is_valid_reg true) reg))

@@ -1,9 +1,10 @@
 (comment) @comment
 
 (ident) @variable
-
 ((ident) @type
   (#match? @type "^[A-Z]"))
+((ident) @constant
+  (#match? @constant "^[A-Z].*\."))
 
 [
   (ty)
@@ -20,11 +21,6 @@
 (bool) @boolean
 
 (wildcard) @keyword
-
-[
-  "("
-  ")"
-] @punctuation.bracket
 
 (pragma op: "pragma" @keyword)
 
@@ -110,3 +106,8 @@
   ">"
   "="
 ] @operator
+
+[
+  "("
+  ")"
+] @punctuation.bracket
