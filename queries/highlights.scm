@@ -94,7 +94,7 @@
 (spec_term name: (ident) @function)
 (provide op: "provide" @keyword)
 (require op: "require" @keyword)
-(switch op: "switch" @keyword)
+(switch op: "switch" @function)
 (spec_operation op: _ @function)
 
 (instantiate

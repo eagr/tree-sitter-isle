@@ -42,7 +42,7 @@
 ;    ^ operator
        (switch s
 ;              ^ variable
-;       ^ keyword
+;       ^ function
          ((VectorSize.Size8x8)
 ;                     ^ constant
            (concat
