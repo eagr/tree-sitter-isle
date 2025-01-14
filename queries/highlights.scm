@@ -1,5 +1,7 @@
 ["(" ")"] @punctuation.bracket
 
+["@"] @operator
+
 (comment) @comment
 
 (ident) @variable
@@ -22,87 +24,48 @@
 (bool) @boolean
 (wildcard) @keyword
 
-(pragma op: "pragma" @keyword)
+(_ op: _ @keyword
+  (#match? @keyword "(pragma|type|primitive|enum|decl|rule|extractor|extern|convert|and|if-let|if|let|model|form|spec|provide|require|instantiate|bv|args|ret|canon)"))
+(_ modifier: _ @keyword
+  (#match? @keyword "(extern|nodebug|infallible)"))
+(_ kind: _ @keyword
+  (#match? @keyword "(const|constructor|extractor|type|enum)"))
 
-(type op: "type" @keyword)
-(type modifier: "extern" @keyword)
-(type modifier: "nodebug" @keyword)
-(type_enum op: "enum" @keyword)
-(type_primitive op: "primitive" @keyword)
-(type_enum_variant name: (ident) @constant)
-(type_enum_variant_field name: (ident) @property)
-(type_enum_variant_field ty: (ty) @type)
+(type_enum_variant
+  name: (ident) @constant)
+(type_enum_variant_field
+  name: (ident) @property)
 
-(decl op: "decl" @keyword
-      name: (ident) @function
-      ret: (ty) @type)
-(decl modifier_pure: "pure" @keyword)
-(decl modifier_multi: "multi" @keyword)
-(decl modifier_partial: "partial" @keyword)
-(decl_params (ty) @type)
-
-(rule op: "rule" @keyword)
-(if_let op: "if-let" @keyword)
-(if op: "if" @keyword)
-(let op: "let" @keyword)
-(pattern_and op: "and" @keyword)
+(decl name: (ident) @function)
+(decl modifier_pure: _ @keyword)
+(decl modifier_multi: _ @keyword)
+(decl modifier_partial: _ @keyword)
 
 (extractor
-  op: "extractor" @keyword
   term: (ident) @function)
 
-(extern_const op: "extern" @keyword
-              kind: "const" @keyword
-              ty: (ty) @type)
-(extern_constructor op: "extern" @keyword
-                    kind: "constructor" @keyword
-                    name: (ident) @function
-                    fn: (ident) @function)
-(extern_extractor op: "extern" @keyword
-                  kind: "extractor" @keyword
-                  name: (ident) @function
-                  fn: (ident) @function)
-(extern_extractor modifier: "infallible" @keyword)
+(extern_constructor
+  name: (ident) @function
+  fn: (ident) @function)
+(extern_extractor
+  name: (ident) @function
+  fn: (ident) @function)
 
-(convert  op: "convert" @keyword
-          inner: (ty) @type
-          outer: (ty) @type
-          name: (ident) @function)
-
-(bv_ty op: "bv" @keyword)
-
-(sig_args op: "args" @keyword)
-(sig_ret op: "ret" @keyword)
-(sig_canon op: "canon" @keyword)
-
-(model
-  op: "model" @keyword
-  name: (ty) @type)
-(model_type kind: "type" @keyword)
-(model_enum kind: "enum" @keyword)
-(model_enum_variant name: (ident) @constant)
-
-(form
-  op: "form" @keyword
+(convert
   name: (ident) @function)
 
-(spec op: "spec" @keyword)
-(spec_term name: (ident) @function)
-(provide op: "provide" @keyword)
-(require op: "require" @keyword)
-(switch op: "switch" @function)
-(spec_operation op: _ @function)
+(model_enum_variant
+  name: (ident) @constant)
+
+(form
+  name: (ident) @function)
+
+(spec_term
+  name: (ident) @function)
+(switch
+  op: _ @function)
+(spec_operation
+  op: _ @function)
 
 (instantiate
-  op: "instantiate" @keyword
   term: (ident) @function)
-
-[
-  "@"
-  "=>"
-  "<="
-  ">="
-  "<"
-  ">"
-  "="
-] @operator

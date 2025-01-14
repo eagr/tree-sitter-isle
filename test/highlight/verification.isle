@@ -39,7 +39,7 @@
 ;  ^ keyword
     (= result
 ;      ^ variable
-;    ^ operator
+;    ^ function
        (switch s
 ;              ^ variable
 ;       ^ function
@@ -79,7 +79,7 @@
 ;                                ^ variable
 ;                              ^ variable
 ;                       ^ function
-;             ^ operator
+;             ^ function
 ;    ^ keyword
     (require (not (= y (zero_ext (widthof y) #b0)))))
 ;                                            ^ constant
@@ -87,7 +87,7 @@
 ;                                 ^ function
 ;                       ^ function
 ;                    ^ variable
-;                  ^ operator
+;                  ^ function
 ;             ^ function
 ;    ^ keyword
 (instantiate udiv bv_binary_8_to_64)
@@ -102,7 +102,7 @@
 ;                             ^ number
 ;                    ^ function
 ;               ^ variable
-;             ^ operator
+;             ^ function
 ;    ^ keyword
 (instantiate iconst
 ;            ^ function
