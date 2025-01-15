@@ -31,8 +31,22 @@
 (rule operand_size_32 1 (operand_size (fits_in_32 _)) (OperandSize.Size32))
 ;                                                                  ^ constant
 ;                                                 ^ keyword
+;                                      ^ function
+;                        ^ function
 ;                     ^ number
+;
 ; ^ keyword
+
+(decl spaceship_s (Type Value Value) Value)
+;     ^ function
+(rule (spaceship_s ty x y) (isub $I8 (sgt ty x y) (slt ty x y)))
+;                                                      ^ variable
+;                                                  ^ function
+;                                         ^ variable
+;                                     ^ function
+;                                ^ constant
+;                           ^ function
+;      ^ function
 
 (rule 0 (iconst_u ty rule)
 ;                    ^ variable
@@ -64,6 +78,16 @@
 ;                     ^ variable
 ;           ^ function
 ; ^ keyword
+
+(extractor (spaceship_s ty x y) (isub $I8 (sgt ty x y) (slt ty x y)))
+;                                                           ^ variable
+;                                                       ^ function
+;                                              ^ variable
+;                                          ^ function
+;                                     ^ constant
+;                                ^ function
+;                       ^ variable
+;           ^ function
 
 (extern const $F64X2 Type)
 ;                    ^ type
